@@ -45,7 +45,7 @@
   </properties>
 
   <scm>
-    <connection>scm:git:https://github.com/VeritasOS/nlp.git</connection>
+    <connection>scm:git:git@github.com:VeritasOS/nlp.git</connection>
     <url>https://github.com/VeritasOS/nlp.git</url>
     <tag>HEAD</tag>
   </scm>
