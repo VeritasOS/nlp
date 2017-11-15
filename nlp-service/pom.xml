@@ -46,6 +46,7 @@
 
   <scm>
     <connection>scm:git:git@github.com:VeritasOS/nlp.git</connection>
+    <developerConnection>scm:git:ssh://github.com/VeritasOS/nlp.git</developerConnection>
     <url>https://github.com/VeritasOS/nlp.git</url>
     <tag>HEAD</tag>
   </scm>
