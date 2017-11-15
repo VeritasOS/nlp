@@ -1,0 +1,77 @@
+# http://www.dropwizard.io/1.1.0/docs/manual/configuration.html
+
+logging:
+  level: INFO
+
+  appenders:
+      # make file appender the 1st so its attributes can be overridden via dropwizard Java system properties starting with -Ddw.logging.appenders[0]
+    - type: file
+
+      # the currentLogFilename default can be overridden by setting the "-Ddw.logging.appenders[0].currentLogFilename" jvm arg
+      currentLogFilename: ./nlp-logs/nlp.log
+
+      # the archivedLogFilenamePattern default can be overridden by setting the "-Ddw.logging.appenders[0].archivedLogFilenamePattern" jvm arg
+      archivedLogFilenamePattern: ./nlp-logs/nlp%i.log.zip
+      maxFileSize: 20MB
+      archivedFileCount: 5
+      logFormat: "%d %-5p {%X{processName}} [%.20t] [%c{0}] %m%n%xEx{5}"
+
+server:
+  shutdownGracePeriod: 30s
+
+  # applicationContextPath is the overall root of the all servlets, including Jersey
+  applicationContextPath: /nlp
+
+  # rootPath is the root of the Jersey (JAX-RS) servlet, i.e. it's the root of our API (but not static assets like UI)
+  # rootPath is relative to applicationContextPath
+  rootPath: /api/
+
+  applicationConnectors:
+    - type: http
+      # specify a port of 0 (zero) for dynamic available port allocation
+      port: 0
+      # lock the port down so that it is only accessible from the local machine by default
+      bindHost: localhost
+
+  adminContextPath: /nlp
+
+  adminConnectors:
+    - type: http
+      # specify a port of 0 (zero) for dynamic available port allocation
+      port: 0
+      # lock the admin port down so that it is only accessible from the local machine by default
+      bindHost: localhost
+
+  # by default all requests are written to the console appender which is extremely verbose! Override by specifying an empty requestLog appenders set.
+  requestLog:
+    appenders: []
+
+  registerDefaultExceptionMappers: false
+
+
+swagger:
+  enabled: false
+  title: Veritas NLP
+  description: APIs
+  version: Resource Specific
+  resourcePackage: com.veritas.nlp.resources
+
+  swaggerViewConfiguration:
+    pageTitle: Veritas NLP API
+
+    # By default, if our URL is not localhost Swagger-UI will try to validate by sending our URL to swagger.io,
+    # which typically won't work because our URL won't be publicly accessible. So we just turn off validation
+    # to avoid unsightly errors in the UI.
+    validatorUrl: null
+    showAuth: false
+
+nlpService:
+  #
+  # Named Entity Recognition (NER)
+  #
+  nerSettings:
+    maxNerContentSizeChars: 10485760
+
+    # During NER the text input is processed in chunks, mainly to improve performance.  This setting can be used
+    # to change the chunk size.
+    nerChunkSizeChars: 65536
