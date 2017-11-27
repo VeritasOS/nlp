@@ -18,7 +18,6 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
 import com.veritas.nlp.resources.ApiRoot;
-import com.veritas.nlp.tasks.StopCheckerTask;
 
 import io.dropwizard.lifecycle.Managed;
 import io.dropwizard.setup.Environment;
@@ -31,6 +30,7 @@ public class NlpMicroService extends Application<NlpConfiguration> {
     private static String processName;
     private NlpServiceSettings settings;
     private Environment environment;
+    private ShutdownListener shutdownListener;
 
     public static void main(String[] args) throws Exception {
         MDC.put("processName", getProcessName());
@@ -72,8 +72,8 @@ public class NlpMicroService extends Application<NlpConfiguration> {
         checkJavaEnvironment();
         setupLifecycleHooks();
         setupLoggingFilter();
-        setupTasks();
         setupRegistrations();
+        startShutdownListener();
     }
 
     public void stop() {
@@ -97,18 +97,13 @@ public class NlpMicroService extends Application<NlpConfiguration> {
         }
     }
 
-    private void setupTasks() {
-        environment.admin().addTask(new StopCheckerTask(this));
-    }
-
     private void setupRegistrations() throws Exception {
         NerResource nerResource = new NerResource(settings);
         environment.jersey().register(new ResourceExceptionMapper());
         environment.jersey().register(nerResource);
         environment.jersey().register(new ApiRoot());
         environment.jersey().register(MultiPartFeature.class);
-        environment.healthChecks().register("NLP health check",
-                new NlpHealthCheck(nerResource));
+        environment.healthChecks().register("NLP health check", new NlpHealthCheck(nerResource));
     }
 
     private void setupLoggingFilter() {
@@ -169,5 +164,12 @@ public class NlpMicroService extends Application<NlpConfiguration> {
 
     private static String getServiceName() {
         return "nlp";
+    }
+
+    private void startShutdownListener() {
+        if (settings.isShutdownListenerEnabled()) {
+            shutdownListener = new ShutdownListener(this::stop);
+            shutdownListener.start();
+        }
     }
 }

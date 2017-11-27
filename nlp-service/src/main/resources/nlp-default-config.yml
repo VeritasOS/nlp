@@ -66,6 +66,11 @@ swagger:
     showAuth: false
 
 nlpService:
+  # The shutdown listener reads STDIN and looks for a CTRL+C (request from launching process to shut down), or EOF
+  # (which is taken as a signal that the launching process has died).  There are some scenarios where the use of STDIN
+  # can cause problems, in which case the shutdown listener should be turned off.
+  shutdownListenerEnabled: true
+
   #
   # Named Entity Recognition (NER)
   #
