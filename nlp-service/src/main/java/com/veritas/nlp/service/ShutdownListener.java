@@ -7,7 +7,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * Listen for a trigger to shut down, typically through CTRL+C on stdin.
+ * Listen for a trigger to shut down, typically through CTRL+C on STDIN.
+ * Also detects closing of the STDIN stream and interprets it as meaning that the launching process has died.
+ * So be careful not to use this class when there is no STDIN connected, or it might trigger immediate shutdown.
  */
 class ShutdownListener {
     private static final Logger LOG = LoggerFactory.getLogger(ShutdownListener.class);
@@ -36,6 +38,7 @@ class ShutdownListener {
                     if (byteRead == -1) {
                         // End of stream - likely because the launching process has died.
                         if (isJvmShuttingDown()) {
+                            // JVM has been shut down by other means, e.g. SIGINT, so no need for us to do anything.
                             LOG.info("JVM shutting down, so ignoring end of stream on STDIN.");
                         } else {
                             LOG.info("STDIN end of stream detected. Assume launching process has died. Initiating shutdown.");

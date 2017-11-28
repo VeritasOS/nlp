@@ -3,7 +3,7 @@ package com.veritas.nlp.service;
 import com.veritas.nlp.ner.NerSettings;
 
 public class NlpServiceSettings {
-    private boolean shutdownListenerEnabled = true;
+    private boolean shutdownListenerEnabled;
     private NerSettings nerSettings;
 
     public NerSettings getNerSettings() {
