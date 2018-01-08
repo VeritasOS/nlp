@@ -26,7 +26,7 @@ class NlpHealthCheck extends HealthCheck {
     protected Result check() {
         try {
             try (InputStream content = new ByteArrayInputStream("My name is Sue Smith".getBytes(StandardCharsets.UTF_8))) {
-                Response response = nerResource.extractEntities(content, null, EnumSet.of(NerEntityType.PERSON), NER_TIMEOUT_SECONDS);
+                Response response = nerResource.extractEntities(content, null, EnumSet.of(NerEntityType.PERSON), NER_TIMEOUT_SECONDS, 90);
                 if (response.getStatus() != HttpStatus.OK_200) {
                     return Result.unhealthy("Named entity recognition failed with status " + response.getStatus());
                 }

@@ -25,6 +25,7 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 
 public class StreamingNerRecognizerTest {
     private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(30);
+    private static final double DEFAULT_MIN_CONFIDENCE = 0.7;
     private static final NerSettings DEFAULT_NER_SETTINGS = new NerSettings();
 
     @Test
@@ -34,7 +35,7 @@ public class StreamingNerRecognizerTest {
             StreamingNerRecognizer recognizer = new StreamingNerRecognizer(EnumSet.of(NerEntityType.PERSON), 100, DEFAULT_NER_SETTINGS);
 
             Map<NerEntityType, Set<String>> entities = recognizer.extractEntities(
-                    new ByteArrayInputStream("My name is Sue Jones.".getBytes(charsetName)), DEFAULT_TIMEOUT);
+                    new ByteArrayInputStream("My name is Sue Jones.".getBytes(charsetName)), DEFAULT_TIMEOUT, DEFAULT_MIN_CONFIDENCE);
 
             assertThat(entities.get(NerEntityType.PERSON)).containsExactly("Sue Jones");
         }
@@ -45,7 +46,7 @@ public class StreamingNerRecognizerTest {
         StreamingNerRecognizer recognizer = new StreamingNerRecognizer(EnumSet.of(NerEntityType.PERSON), 100, DEFAULT_NER_SETTINGS);
 
         // First, get the recognizer warmed up, so first-time-load delays don't influence our test.
-        recognizer.extractEntities(new ByteArrayInputStream("hello world".getBytes(StandardCharsets.UTF_8)), DEFAULT_TIMEOUT);
+        recognizer.extractEntities(new ByteArrayInputStream("hello world".getBytes(StandardCharsets.UTF_8)), DEFAULT_TIMEOUT, DEFAULT_MIN_CONFIDENCE);
 
         PipedInputStream inputStream = new PipedInputStream();
         PipedOutputStream outputStream = new PipedOutputStream(inputStream);
@@ -63,7 +64,7 @@ public class StreamingNerRecognizerTest {
             outputStream.close();
         });
 
-        Map<NerEntityType, Set<String>> entities = recognizer.extractEntities(inputStream, DEFAULT_TIMEOUT);
+        Map<NerEntityType, Set<String>> entities = recognizer.extractEntities(inputStream, DEFAULT_TIMEOUT, DEFAULT_MIN_CONFIDENCE);
         assertThat(entities.get(NerEntityType.PERSON)).containsExactly("Joe Bloggs");
     }
 
@@ -82,7 +83,7 @@ public class StreamingNerRecognizerTest {
         });
 
         Duration shortTimeout = Duration.ofMillis(300);
-        assertThatThrownBy(() -> recognizer.extractEntities(inputStream, shortTimeout)).isInstanceOf(TimeoutException.class);
+        assertThatThrownBy(() -> recognizer.extractEntities(inputStream, shortTimeout, DEFAULT_MIN_CONFIDENCE)).isInstanceOf(TimeoutException.class);
     }
 
     @Test
@@ -100,7 +101,7 @@ public class StreamingNerRecognizerTest {
             outputStream.close();
         });
 
-        Throwable thrown = catchThrowable(() -> recognizer.extractEntities(inputStream, DEFAULT_TIMEOUT));
+        Throwable thrown = catchThrowable(() -> recognizer.extractEntities(inputStream, DEFAULT_TIMEOUT, DEFAULT_MIN_CONFIDENCE));
         assertThat(thrown).isInstanceOf(NerException.class);
         assertThat(((NerException)thrown).getCode()).isEqualTo(ErrorCode.CONTENT_TOO_LARGE);
     }

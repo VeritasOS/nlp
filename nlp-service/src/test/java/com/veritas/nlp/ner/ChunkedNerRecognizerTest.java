@@ -15,6 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class ChunkedNerRecognizerTest {
+    private static final double DEFAULT_MIN_CONFIDENCE = 0.7;
 
     @Test
     public void canRecognizeName() throws Exception {
@@ -93,7 +94,7 @@ public class ChunkedNerRecognizerTest {
         IntStream.range(0, 100000).forEach(i -> sb.append('a'));    // loads of text chunks with no whitespace to break on
 
         int chunkSize = 1000;
-        ChunkedNerRecognizer recognizer = new ChunkedNerRecognizer(EnumSet.of(NerEntityType.PERSON), chunkSize);
+        ChunkedNerRecognizer recognizer = new ChunkedNerRecognizer(EnumSet.of(NerEntityType.PERSON), chunkSize, DEFAULT_MIN_CONFIDENCE);
         addContent(recognizer, sb.toString());
         Map<NerEntityType, Set<String>> entities = recognizer.getEntities();
 
@@ -102,7 +103,7 @@ public class ChunkedNerRecognizerTest {
     }
 
     private ChunkedNerRecognizer createPersonRecognizer() {
-        return new ChunkedNerRecognizer(EnumSet.of(NerEntityType.PERSON), 32768);
+        return new ChunkedNerRecognizer(EnumSet.of(NerEntityType.PERSON), 32768, DEFAULT_MIN_CONFIDENCE);
     }
 
     private void addContent(ChunkedNerRecognizer recognizer, String content) throws Exception {

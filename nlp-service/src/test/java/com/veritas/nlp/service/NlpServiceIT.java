@@ -82,6 +82,30 @@ public class NlpServiceIT {
     }
 
     @Test
+    public void canApplyMinConfidenceToNameRecognition() throws Exception {
+        // The lower case b in bloggs reduces the confidence of 'Joe bloggs' as a name.
+        String content = "My name is Joe bloggs, and my sister is Jane Bloggs.  We live in Sydney, Australia.";
+
+        // No minimum confidence - should get both Joe and Jane
+        int minConfidencePercentage = 0;
+        Map<NerEntityType, Set<String>> entityMap = extractNames(content, StandardCharsets.UTF_8, EnumSet.of(NerEntityType.PERSON), minConfidencePercentage);
+        Set<String> people = entityMap.get(NerEntityType.PERSON);
+        assertThat(people).containsExactlyInAnyOrder("Joe bloggs", "Jane Bloggs");
+
+        // Low minimum confidence - should get both Joe and Jane
+        minConfidencePercentage = 50;
+        entityMap = extractNames(content, StandardCharsets.UTF_8, EnumSet.of(NerEntityType.PERSON), minConfidencePercentage);
+        people = entityMap.get(NerEntityType.PERSON);
+        assertThat(people).containsExactlyInAnyOrder("Joe bloggs", "Jane Bloggs");
+
+        // High minimum confidence - should get only Jane.
+        minConfidencePercentage = 99;
+        entityMap = extractNames(content, StandardCharsets.UTF_8, EnumSet.of(NerEntityType.PERSON), minConfidencePercentage);
+        people = entityMap.get(NerEntityType.PERSON);
+        assertThat(people).containsExactlyInAnyOrder("Jane Bloggs");
+    }
+
+    @Test
     public void canRestrictTypeOfNamesReturned() throws Exception {
         String content = "My name is Joe Bloggs, and my sister is Jane Bloggs.  We live in Sydney, Australia.";
 
@@ -93,6 +117,10 @@ public class NlpServiceIT {
     }
 
     private Map<NerEntityType, Set<String>> extractNames(String content, Charset charset, EnumSet<NerEntityType> entityTypes) throws Exception {
+        return extractNames(content, charset, entityTypes, null);
+    }
+
+    private Map<NerEntityType, Set<String>> extractNames(String content, Charset charset, EnumSet<NerEntityType> entityTypes, Integer minConfidencePercentage) throws Exception {
         UriBuilder uriBuilder = UriBuilder.fromUri(API_URL)
                 .path("v1/names")
                 .port(testService.getAppPort());
@@ -105,6 +133,7 @@ public class NlpServiceIT {
 
             NerResult result = client.target(uriBuilder)
                     .queryParam("type", entityTypes == null ? null : entityTypes.toArray())
+                    .queryParam("minConfidencePercentage", minConfidencePercentage)
                     .request()
                     .accept(MediaType.APPLICATION_JSON)
                     .post(createMultiPartEntityForApacheConnector(multipart), NerResult.class);

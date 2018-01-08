@@ -34,8 +34,8 @@ public class StreamingNerRecognizer {
     }
 
     @SuppressFBWarnings(value = "OS_OPEN_STREAM", justification = "Caller owns the stream, so is responsible for closing it.")
-    public Map<NerEntityType, Set<String>> extractEntities(InputStream textStream, Duration timeout) throws Exception {
-        ChunkedNerRecognizer chunkedNerRecognizer = new ChunkedNerRecognizer(entityTypes, nerSettings.getNerChunkSizeChars());
+    public Map<NerEntityType, Set<String>> extractEntities(InputStream textStream, Duration timeout, double minConfidence) throws Exception {
+        ChunkedNerRecognizer chunkedNerRecognizer = new ChunkedNerRecognizer(entityTypes, nerSettings.getNerChunkSizeChars(), minConfidence);
         chunkedNerRecognizer.setTimeout(timeout);
 
         // NOTE: BOMInputStream will detect the charset from the BOM and then (by default) skip the BOM.

@@ -24,13 +24,15 @@ class ChunkedNerRecognizer {
     private final Map<NerEntityType, Set<String>> entities = new HashMap<>();
     private final EnumSet<NerEntityType> entityTypes;
     private final int chunkSize;
-    private final StanfordNLP stanfordNLP = new StanfordNLP();
+    private final double minConfidence;
+    private final StanfordNER stanfordNER = new StanfordNER();
     private final Instant startTime = Instant.now();
     private Duration timeout = Duration.ofSeconds(30);
 
-    ChunkedNerRecognizer(EnumSet<NerEntityType> entityTypes, int chunkSize) {
+    ChunkedNerRecognizer(EnumSet<NerEntityType> entityTypes, int chunkSize, double minConfidence) {
         this.entityTypes = entityTypes;
         this.chunkSize = chunkSize;
+        this.minConfidence = minConfidence;
     }
 
     void setTimeout(Duration timeout) {
@@ -72,7 +74,7 @@ class ChunkedNerRecognizer {
 
     private Map<NerEntityType, Set<String>> extractEntities(CharSequence text) throws Exception {
         checkTimeout();
-        return stanfordNLP.getEntities(text.toString(), entityTypes);
+        return stanfordNER.getEntities(text.toString(), entityTypes, minConfidence);
     }
 
     private void checkTimeout() throws TimeoutException {
