@@ -1,6 +1,6 @@
 package com.veritas.nlp.models;
 
-public enum NerEntityType {
+public enum NlpTagType {
     PERSON,
     ORGANIZATION,
     LOCATION

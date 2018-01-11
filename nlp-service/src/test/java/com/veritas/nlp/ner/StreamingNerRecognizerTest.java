@@ -1,9 +1,12 @@
 package com.veritas.nlp.ner;
 
-import com.veritas.nlp.models.NerEntityType;
+import com.veritas.nlp.models.NlpTagSet;
+import com.veritas.nlp.models.NlpTagType;
 import com.veritas.nlp.resources.ErrorCode;
+import com.veritas.nlp.resources.NlpRequestParams;
 import com.veritas.nlp.utils.ThrowingRunnable;
 import org.apache.commons.io.IOUtils;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.ByteArrayInputStream;
@@ -15,7 +18,6 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.TimeoutException;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,29 +26,35 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 
 
 public class StreamingNerRecognizerTest {
-    private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(30);
-    private static final double DEFAULT_MIN_CONFIDENCE = 0.7;
     private static final NerSettings DEFAULT_NER_SETTINGS = new NerSettings();
+
+    private NlpRequestParams params;
+
+    @BeforeMethod
+    public void beforeMethod() {
+        this.params = new NlpRequestParams();
+        params.setTagTypes(EnumSet.of(NlpTagType.PERSON));
+    }
 
     @Test
     public void canExtractEntitiesFromStream() throws Exception {
         // NOTE: Must use charsets that add a BOM where necessary, e.g. UnicodeLittle rather than UTF-16LE.
         for (String charsetName : Arrays.asList("UTF-8", "UnicodeLittle", "UnicodeBig", "UTF_32BE_BOM", "UTF_32LE_BOM")) {
-            StreamingNerRecognizer recognizer = new StreamingNerRecognizer(EnumSet.of(NerEntityType.PERSON), 100, DEFAULT_NER_SETTINGS);
+            StreamingNerRecognizer recognizer = new StreamingNerRecognizer(100, DEFAULT_NER_SETTINGS);
 
-            Map<NerEntityType, Set<String>> entities = recognizer.extractEntities(
-                    new ByteArrayInputStream("My name is Sue Jones.".getBytes(charsetName)), DEFAULT_TIMEOUT, DEFAULT_MIN_CONFIDENCE);
+            Map<NlpTagType, NlpTagSet> entities = recognizer.extractEntities(
+                    new ByteArrayInputStream("My name is Sue Jones.".getBytes(charsetName)), params);
 
-            assertThat(entities.get(NerEntityType.PERSON)).containsExactly("Sue Jones");
+            assertThat(entities.get(NlpTagType.PERSON).getTags()).containsExactly("Sue Jones");
         }
     }
 
     @Test
     public void canExtractEntitiesFromSlowlyPopulatedStream() throws Exception {
-        StreamingNerRecognizer recognizer = new StreamingNerRecognizer(EnumSet.of(NerEntityType.PERSON), 100, DEFAULT_NER_SETTINGS);
+        StreamingNerRecognizer recognizer = new StreamingNerRecognizer(100, DEFAULT_NER_SETTINGS);
 
         // First, get the recognizer warmed up, so first-time-load delays don't influence our test.
-        recognizer.extractEntities(new ByteArrayInputStream("hello world".getBytes(StandardCharsets.UTF_8)), DEFAULT_TIMEOUT, DEFAULT_MIN_CONFIDENCE);
+        recognizer.extractEntities(new ByteArrayInputStream("hello world".getBytes(StandardCharsets.UTF_8)), params);
 
         PipedInputStream inputStream = new PipedInputStream();
         PipedOutputStream outputStream = new PipedOutputStream(inputStream);
@@ -64,13 +72,13 @@ public class StreamingNerRecognizerTest {
             outputStream.close();
         });
 
-        Map<NerEntityType, Set<String>> entities = recognizer.extractEntities(inputStream, DEFAULT_TIMEOUT, DEFAULT_MIN_CONFIDENCE);
-        assertThat(entities.get(NerEntityType.PERSON)).containsExactly("Joe Bloggs");
+        Map<NlpTagType, NlpTagSet> entities = recognizer.extractEntities(inputStream, params);
+        assertThat(entities.get(NlpTagType.PERSON).getTags()).containsExactly("Joe Bloggs");
     }
 
     @Test
     public void recognizerThrowsIfTakesTooLong() throws Exception {
-        StreamingNerRecognizer recognizer = new StreamingNerRecognizer(EnumSet.of(NerEntityType.PERSON), 100, DEFAULT_NER_SETTINGS);
+        StreamingNerRecognizer recognizer = new StreamingNerRecognizer(100, DEFAULT_NER_SETTINGS);
 
         PipedInputStream inputStream = new PipedInputStream();
         PipedOutputStream outputStream = new PipedOutputStream(inputStream);
@@ -82,15 +90,15 @@ public class StreamingNerRecognizerTest {
             outputStream.close();
         });
 
-        Duration shortTimeout = Duration.ofMillis(300);
-        assertThatThrownBy(() -> recognizer.extractEntities(inputStream, shortTimeout, DEFAULT_MIN_CONFIDENCE)).isInstanceOf(TimeoutException.class);
+        params.setTimeout(Duration.ofMillis(300));
+        assertThatThrownBy(() -> recognizer.extractEntities(inputStream, params)).isInstanceOf(TimeoutException.class);
     }
 
     @Test
     public void recognizerThrowsIfContentTooLarge() throws Exception {
         NerSettings nerSettings = new NerSettings();
         nerSettings.setMaxNerContentSizeChars(10);
-        StreamingNerRecognizer recognizer = new StreamingNerRecognizer(EnumSet.of(NerEntityType.PERSON), 100, nerSettings);
+        StreamingNerRecognizer recognizer = new StreamingNerRecognizer(100, nerSettings);
 
         PipedInputStream inputStream = new PipedInputStream();
         PipedOutputStream outputStream = new PipedOutputStream(inputStream);
@@ -101,7 +109,7 @@ public class StreamingNerRecognizerTest {
             outputStream.close();
         });
 
-        Throwable thrown = catchThrowable(() -> recognizer.extractEntities(inputStream, DEFAULT_TIMEOUT, DEFAULT_MIN_CONFIDENCE));
+        Throwable thrown = catchThrowable(() -> recognizer.extractEntities(inputStream, params));
         assertThat(thrown).isInstanceOf(NerException.class);
         assertThat(((NerException)thrown).getCode()).isEqualTo(ErrorCode.CONTENT_TOO_LARGE);
     }

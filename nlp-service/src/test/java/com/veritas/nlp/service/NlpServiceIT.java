@@ -1,7 +1,9 @@
 package com.veritas.nlp.service;
 
 import com.veritas.nlp.models.NerResult;
-import com.veritas.nlp.models.NerEntityType;
+import com.veritas.nlp.models.NlpMatch;
+import com.veritas.nlp.models.NlpTagSet;
+import com.veritas.nlp.models.NlpTagType;
 import org.glassfish.jersey.media.multipart.Boundary;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.file.StreamDataBodyPart;
@@ -20,8 +22,11 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -59,9 +64,9 @@ public class NlpServiceIT {
     public void canRecognizeNames_UTF8() throws Exception {
         String content = "My name is Joe Bloggs, and my sister is Jane Bloggs.  We live in Sydney, Australia.";
 
-        Map<NerEntityType, Set<String>> entityMap = extractNames(content, StandardCharsets.UTF_8, null);
-        Set<String> people = entityMap.get(NerEntityType.PERSON);
-        Set<String> locations = entityMap.get(NerEntityType.LOCATION);
+        Map<NlpTagType, NlpTagSet> entityMap = extractNames(content, StandardCharsets.UTF_8, null);
+        Set<String> people = entityMap.get(NlpTagType.PERSON).getTags();
+        Set<String> locations = entityMap.get(NlpTagType.LOCATION).getTags();
 
         assertThat(entityMap).hasSize(2);
         assertThat(people).containsExactlyInAnyOrder("Joe Bloggs", "Jane Bloggs");
@@ -72,9 +77,9 @@ public class NlpServiceIT {
     public void canRecognizeNames_UTF16LE() throws Exception {
         String content = "My name is Joe Bloggs, and my sister is Jane Bloggs.  We live in Sydney, Australia.";
 
-        Map<NerEntityType, Set<String>> entityMap = extractNames(content, Charset.forName("UnicodeLittle"), null);
-        Set<String> people = entityMap.get(NerEntityType.PERSON);
-        Set<String> locations = entityMap.get(NerEntityType.LOCATION);
+        Map<NlpTagType, NlpTagSet> entityMap = extractNames(content, Charset.forName("UnicodeLittle"), null);
+        Set<String> people = entityMap.get(NlpTagType.PERSON).getTags();
+        Set<String> locations = entityMap.get(NlpTagType.LOCATION).getTags();
 
         assertThat(entityMap).hasSize(2);
         assertThat(people).containsExactlyInAnyOrder("Joe Bloggs", "Jane Bloggs");
@@ -88,20 +93,20 @@ public class NlpServiceIT {
 
         // No minimum confidence - should get both Joe and Jane
         int minConfidencePercentage = 0;
-        Map<NerEntityType, Set<String>> entityMap = extractNames(content, StandardCharsets.UTF_8, EnumSet.of(NerEntityType.PERSON), minConfidencePercentage);
-        Set<String> people = entityMap.get(NerEntityType.PERSON);
+        Map<NlpTagType, NlpTagSet> entityMap = extractNames(content, StandardCharsets.UTF_8, EnumSet.of(NlpTagType.PERSON), minConfidencePercentage);
+        Set<String> people = entityMap.get(NlpTagType.PERSON).getTags();
         assertThat(people).containsExactlyInAnyOrder("Joe bloggs", "Jane Bloggs");
 
         // Low minimum confidence - should get both Joe and Jane
         minConfidencePercentage = 50;
-        entityMap = extractNames(content, StandardCharsets.UTF_8, EnumSet.of(NerEntityType.PERSON), minConfidencePercentage);
-        people = entityMap.get(NerEntityType.PERSON);
+        entityMap = extractNames(content, StandardCharsets.UTF_8, EnumSet.of(NlpTagType.PERSON), minConfidencePercentage);
+        people = entityMap.get(NlpTagType.PERSON).getTags();
         assertThat(people).containsExactlyInAnyOrder("Joe bloggs", "Jane Bloggs");
 
         // High minimum confidence - should get only Jane.
         minConfidencePercentage = 99;
-        entityMap = extractNames(content, StandardCharsets.UTF_8, EnumSet.of(NerEntityType.PERSON), minConfidencePercentage);
-        people = entityMap.get(NerEntityType.PERSON);
+        entityMap = extractNames(content, StandardCharsets.UTF_8, EnumSet.of(NlpTagType.PERSON), minConfidencePercentage);
+        people = entityMap.get(NlpTagType.PERSON).getTags();
         assertThat(people).containsExactlyInAnyOrder("Jane Bloggs");
     }
 
@@ -109,18 +114,47 @@ public class NlpServiceIT {
     public void canRestrictTypeOfNamesReturned() throws Exception {
         String content = "My name is Joe Bloggs, and my sister is Jane Bloggs.  We live in Sydney, Australia.";
 
-        Map<NerEntityType, Set<String>> entityMap = extractNames(content, StandardCharsets.UTF_8, EnumSet.of(NerEntityType.PERSON));
-        Set<String> people = entityMap.get(NerEntityType.PERSON);
+        Map<NlpTagType, NlpTagSet> entityMap = extractNames(content, StandardCharsets.UTF_8, EnumSet.of(NlpTagType.PERSON));
+        Set<String> people = entityMap.get(NlpTagType.PERSON).getTags();
 
         assertThat(entityMap).hasSize(1);
         assertThat(people).containsExactlyInAnyOrder("Joe Bloggs", "Jane Bloggs");
     }
 
-    private Map<NerEntityType, Set<String>> extractNames(String content, Charset charset, EnumSet<NerEntityType> entityTypes) throws Exception {
+    @Test
+    public void canIncludeMatches() throws Exception {
+        String content = "My name is Joe Bloggs, and my sister is Jane Bloggs.  We live in Sydney, Australia.";
+
+        NerResult result = extractNames(content, StandardCharsets.UTF_8, EnumSet.of(NlpTagType.PERSON), 0, true, 100);
+        assertThat(result.getNlpTagSets().get(0).getMatches()).hasSize(2);
+    }
+
+    @Test
+    public void canLimitMatches() throws Exception {
+        String content = "My name is Joe Bloggs, my dad is Joe Bloggs, my sister is Jane Bloggs and my grandfather is James Bloggs.";
+
+        // Max 100 matches, so should get all four.
+        NerResult result = extractNames(content, StandardCharsets.UTF_8, EnumSet.of(NlpTagType.PERSON), 0, true, 100);
+        List<NlpMatch> matches = result.getNlpTagSets().get(0).getMatches();
+        assertThat(matches).hasSize(4);
+
+        // Max three matches, so should get just three.
+        result = extractNames(content, StandardCharsets.UTF_8, EnumSet.of(NlpTagType.PERSON), 0, true, 3);
+        matches = result.getNlpTagSets().get(0).getMatches();
+        assertThat(matches).hasSize(3);
+    }
+
+    private Map<NlpTagType, NlpTagSet> extractNames(String content, Charset charset, EnumSet<NlpTagType> entityTypes) throws Exception {
         return extractNames(content, charset, entityTypes, null);
     }
 
-    private Map<NerEntityType, Set<String>> extractNames(String content, Charset charset, EnumSet<NerEntityType> entityTypes, Integer minConfidencePercentage) throws Exception {
+    private Map<NlpTagType, NlpTagSet> extractNames(String content, Charset charset, EnumSet<NlpTagType> entityTypes, Integer minConfidencePercentage) throws Exception {
+        NerResult result = extractNames(content, charset, entityTypes, minConfidencePercentage, false, 100);
+        return result.getNlpTagSets().stream().collect(Collectors.toMap(NlpTagSet::getType, Function.identity()));
+    }
+
+    private NerResult extractNames(String content, Charset charset, EnumSet<NlpTagType> entityTypes, Integer minConfidencePercentage,
+                                   boolean includeMatches, int maxContentMatches) throws Exception {
         UriBuilder uriBuilder = UriBuilder.fromUri(API_URL)
                 .path("v1/names")
                 .port(testService.getAppPort());
@@ -134,11 +168,13 @@ public class NlpServiceIT {
             NerResult result = client.target(uriBuilder)
                     .queryParam("type", entityTypes == null ? null : entityTypes.toArray())
                     .queryParam("minConfidencePercentage", minConfidencePercentage)
+                    .queryParam("includeMatches", includeMatches)
+                    .queryParam("maxContentMatches", maxContentMatches)
                     .request()
                     .accept(MediaType.APPLICATION_JSON)
                     .post(createMultiPartEntityForApacheConnector(multipart), NerResult.class);
 
-            return result.getEntities();
+            return result;
         }
     }
 

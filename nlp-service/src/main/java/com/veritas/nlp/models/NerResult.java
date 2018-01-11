@@ -1,25 +1,24 @@
 package com.veritas.nlp.models;
 
-import io.swagger.annotations.ApiModelProperty;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class NerResult {
-    private Map<NerEntityType, Set<String>> entities;
+    private List<NlpTagSet> nlpTagSets;    // We use a List rather than a Map<NlpTagType,NlpTagSet> because Swagger sucks
 
-    public NerResult() {}
-
-    public NerResult(Map<NerEntityType, Set<String>> entities) {
-        this.entities = entities;
+    public NerResult() {
     }
 
-    @ApiModelProperty(value="Map of entity types (e.g. PERSON, LOCATION) to set of entities (e.g. \"Sue Smith\", \"London\")")
-    public Map<NerEntityType, Set<String>> getEntities() {
-        return entities;
+    public NerResult(Map<NlpTagType, NlpTagSet> tagSetsMap) {
+        this.nlpTagSets = new ArrayList<>(tagSetsMap.values());
     }
 
-    public void setEntities(Map<NerEntityType, Set<String>> entities) {
-        this.entities = entities;
+    public List<NlpTagSet> getNlpTagSets() {
+        return nlpTagSets;
+    }
+
+    public void setNlpTagSets(List<NlpTagSet> nlpTagSets) {
+        this.nlpTagSets = nlpTagSets;
     }
 }

@@ -1,17 +1,16 @@
 package com.veritas.nlp.ner;
 
-import com.veritas.nlp.models.NerEntityType;
+import com.veritas.nlp.models.NlpTagSet;
+import com.veritas.nlp.models.NlpTagType;
+import com.veritas.nlp.resources.NlpRequestParams;
 import com.veritas.nlp.text.SmartTextSplitter;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.concurrent.TimeoutException;
 
 /**
@@ -21,18 +20,17 @@ import java.util.concurrent.TimeoutException;
 class ChunkedNerRecognizer {
     private static final int SEARCH_SENTENCE_BOUNDARY_MAX_CHARS = 200;
     private final StringBuilder toBeProcessed = new StringBuilder();
-    private final Map<NerEntityType, Set<String>> entities = new HashMap<>();
-    private final EnumSet<NerEntityType> entityTypes;
+    private final Map<NlpTagType, NlpTagSet> entitiesMap = new HashMap<>();
     private final int chunkSize;
-    private final double minConfidence;
-    private final StanfordNER stanfordNER = new StanfordNER();
+    private final NlpRequestParams params;
     private final Instant startTime = Instant.now();
-    private Duration timeout = Duration.ofSeconds(30);
+    private Duration timeout;
+    private long matchBaseOffset;
 
-    ChunkedNerRecognizer(EnumSet<NerEntityType> entityTypes, int chunkSize, double minConfidence) {
-        this.entityTypes = entityTypes;
+    ChunkedNerRecognizer(int chunkSize, NlpRequestParams params) {
         this.chunkSize = chunkSize;
-        this.minConfidence = minConfidence;
+        this.params = params;
+        this.timeout = params.getTimeout();
     }
 
     void setTimeout(Duration timeout) {
@@ -47,9 +45,9 @@ class ChunkedNerRecognizer {
         processText(false);
     }
 
-    Map<NerEntityType, Set<String>> getEntities() throws Exception {
+    Map<NlpTagType, NlpTagSet> getEntities() throws Exception {
         processText(true);
-        return entities;
+        return entitiesMap;
     }
 
     private void processText(boolean finalize) throws Exception {
@@ -60,21 +58,28 @@ class ChunkedNerRecognizer {
         // which case we know we won't get any more text to fill out the chunk)
         int chunksToProcess = finalize ? chunks.size() : chunks.size() - 1;
 
+        long matchBaseOffsetForChunk = matchBaseOffset;
         for (int i=0; i < chunksToProcess; i++) {
-            Map<NerEntityType, Set<String>> entities = extractEntities(chunks.get(i));
-            storeEntities(entities);
+            extractEntities(chunks.get(i), matchBaseOffsetForChunk);
+            matchBaseOffsetForChunk += chunks.get(i).length();
         }
 
         if (!finalize && chunks.size() >= 2) {
             // The last chunk wasn't processed - it will be the start of the first chunk next time.
+            long processedLength = toBeProcessed.length();
             toBeProcessed.setLength(0);
             toBeProcessed.append(chunks.get(chunks.size() - 1));
+            processedLength -= toBeProcessed.length();
+
+            matchBaseOffset += processedLength;
         }
     }
 
-    private Map<NerEntityType, Set<String>> extractEntities(CharSequence text) throws Exception {
+    private void extractEntities(CharSequence text, long matchBaseOffsetForChunk) throws Exception {
         checkTimeout();
-        return stanfordNER.getEntities(text.toString(), entityTypes, minConfidence);
+        StanfordEntityRecogniser recogniser = new StanfordEntityRecogniser(
+                entitiesMap, text.toString(), params, matchBaseOffsetForChunk);
+        recogniser.extractEntities();
     }
 
     private void checkTimeout() throws TimeoutException {
@@ -82,11 +87,4 @@ class ChunkedNerRecognizer {
             throw new TimeoutException();
         }
     }
-
-    private void storeEntities(Map<NerEntityType, Set<String>> entitiesToStore) {
-        entitiesToStore.forEach((type, values) -> {
-            entities.computeIfAbsent(type, t -> new TreeSet<>(String.CASE_INSENSITIVE_ORDER)).addAll(values);
-        });
-    }
-
 }

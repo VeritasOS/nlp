@@ -1,7 +1,7 @@
 package com.veritas.nlp.service;
 
 import com.codahale.metrics.health.HealthCheck;
-import com.veritas.nlp.models.NerEntityType;
+import com.veritas.nlp.models.NlpTagType;
 import com.veritas.nlp.resources.NerResource;
 import org.eclipse.jetty.http.HttpStatus;
 import org.slf4j.Logger;
@@ -26,7 +26,7 @@ class NlpHealthCheck extends HealthCheck {
     protected Result check() {
         try {
             try (InputStream content = new ByteArrayInputStream("My name is Sue Smith".getBytes(StandardCharsets.UTF_8))) {
-                Response response = nerResource.extractEntities(content, null, EnumSet.of(NerEntityType.PERSON), NER_TIMEOUT_SECONDS, 90);
+                Response response = nerResource.extractEntities(content, null, EnumSet.of(NlpTagType.PERSON), NER_TIMEOUT_SECONDS, 90, false, 0);
                 if (response.getStatus() != HttpStatus.OK_200) {
                     return Result.unhealthy("Named entity recognition failed with status " + response.getStatus());
                 }

@@ -1,7 +1,9 @@
 package com.veritas.nlp.ner;
 
-import com.veritas.nlp.models.NerEntityType;
+import com.veritas.nlp.models.NlpTagSet;
+import com.veritas.nlp.models.NlpTagType;
 import com.veritas.nlp.resources.ErrorCode;
+import com.veritas.nlp.resources.NlpRequestParams;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.io.ByteOrderMark;
 import org.apache.commons.io.input.BOMInputStream;
@@ -9,34 +11,30 @@ import org.apache.commons.io.input.BOMInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.time.Duration;
-import java.util.EnumSet;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Reads text from a supplied stream and extracts named entities from it.
  */
 public class StreamingNerRecognizer {
     private static final int DEFAULT_BUFFER_SIZE_CHARS = 1024 * 1024;
-    private final EnumSet<NerEntityType> entityTypes;
     private final int bufferSizeChars;
     private final NerSettings nerSettings;
 
-    public StreamingNerRecognizer(EnumSet<NerEntityType> entityTypes, int bufferSizeChars, NerSettings nerSettings) {
-        this.entityTypes = entityTypes;
+    public StreamingNerRecognizer(int bufferSizeChars, NerSettings nerSettings) {
         this.bufferSizeChars = bufferSizeChars;
         this.nerSettings = nerSettings;
     }
 
-    public StreamingNerRecognizer(EnumSet<NerEntityType> entityTypes, NerSettings nerSettings) {
-        this(entityTypes, DEFAULT_BUFFER_SIZE_CHARS, nerSettings);
+    public StreamingNerRecognizer(NerSettings nerSettings) {
+        this(DEFAULT_BUFFER_SIZE_CHARS, nerSettings);
     }
 
     @SuppressFBWarnings(value = "OS_OPEN_STREAM", justification = "Caller owns the stream, so is responsible for closing it.")
-    public Map<NerEntityType, Set<String>> extractEntities(InputStream textStream, Duration timeout, double minConfidence) throws Exception {
-        ChunkedNerRecognizer chunkedNerRecognizer = new ChunkedNerRecognizer(entityTypes, nerSettings.getNerChunkSizeChars(), minConfidence);
-        chunkedNerRecognizer.setTimeout(timeout);
+    public Map<NlpTagType, NlpTagSet> extractEntities(
+            InputStream textStream, NlpRequestParams params) throws Exception {
+
+        ChunkedNerRecognizer chunkedNerRecognizer = new ChunkedNerRecognizer(nerSettings.getNerChunkSizeChars(), params);
 
         // NOTE: BOMInputStream will detect the charset from the BOM and then (by default) skip the BOM.
         // WARNING! BOMInputStream sorts the supplied array of BOMs, so DO NOT pass in a static array, or you may
