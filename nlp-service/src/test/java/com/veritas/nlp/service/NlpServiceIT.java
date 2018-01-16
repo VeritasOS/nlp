@@ -126,7 +126,8 @@ public class NlpServiceIT {
         String content = "My name is Joe Bloggs, and my sister is Jane Bloggs.  We live in Sydney, Australia.";
 
         NerResult result = extractNames(content, StandardCharsets.UTF_8, EnumSet.of(NlpTagType.PERSON), 0, true, 100);
-        assertThat(result.getNlpTagSets().get(0).getMatches()).hasSize(2);
+        assertThat(result.getNlpTagSets().get(0).getMatchCollection().getMatches()).hasSize(2);
+        assertThat(result.getNlpTagSets().get(0).getMatchCollection().getTotal()).isEqualTo(2);
     }
 
     @Test
@@ -135,13 +136,13 @@ public class NlpServiceIT {
 
         // Max 100 matches, so should get all four.
         NerResult result = extractNames(content, StandardCharsets.UTF_8, EnumSet.of(NlpTagType.PERSON), 0, true, 100);
-        List<NlpMatch> matches = result.getNlpTagSets().get(0).getMatches();
-        assertThat(matches).hasSize(4);
+        assertThat(result.getNlpTagSets().get(0).getMatchCollection().getMatches()).hasSize(4);
+        assertThat(result.getNlpTagSets().get(0).getMatchCollection().getTotal()).isEqualTo(4);
 
         // Max three matches, so should get just three.
         result = extractNames(content, StandardCharsets.UTF_8, EnumSet.of(NlpTagType.PERSON), 0, true, 3);
-        matches = result.getNlpTagSets().get(0).getMatches();
-        assertThat(matches).hasSize(3);
+        assertThat(result.getNlpTagSets().get(0).getMatchCollection().getMatches()).hasSize(3);
+        assertThat(result.getNlpTagSets().get(0).getMatchCollection().getTotal()).isEqualTo(4);
     }
 
     private Map<NlpTagType, NlpTagSet> extractNames(String content, Charset charset, EnumSet<NlpTagType> entityTypes) throws Exception {

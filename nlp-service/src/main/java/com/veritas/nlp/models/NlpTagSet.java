@@ -7,7 +7,7 @@ import java.util.*;
 public class NlpTagSet {
     private NlpTagType type;
     private Set<String> tags = new HashSet<>();
-    private List<NlpMatch> matches = new ArrayList<>();
+    private NlpMatchCollection matchCollection;
 
     public NlpTagSet() {
     }
@@ -34,11 +34,11 @@ public class NlpTagSet {
     }
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    public List<NlpMatch> getMatches() {
-        return matches;
+    public NlpMatchCollection getMatchCollection() {
+        return matchCollection;
     }
 
-    public void setMatches(List<NlpMatch> matches) {
-        this.matches = matches;
+    public void setMatchCollection(NlpMatchCollection matchCollection) {
+        this.matchCollection = matchCollection;
     }
 }

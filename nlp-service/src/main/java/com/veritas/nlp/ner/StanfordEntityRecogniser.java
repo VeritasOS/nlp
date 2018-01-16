@@ -3,6 +3,7 @@ package com.veritas.nlp.ner;
 import com.google.common.base.Enums;
 import com.google.common.base.Suppliers;
 import com.veritas.nlp.models.NlpMatch;
+import com.veritas.nlp.models.NlpMatchCollection;
 import com.veritas.nlp.models.NlpTagSet;
 import com.veritas.nlp.models.NlpTagType;
 import com.veritas.nlp.resources.NlpRequestParams;
@@ -106,8 +107,14 @@ class StanfordEntityRecogniser {
         String entityText = getText(entityTokens);
         tagSet.getTags().add(entityText);
 
-        if (params.includeMatches() && CollectionUtils.size(tagSet.getMatches()) < params.getMaxContentMatches()) {
-            tagSet.getMatches().add(createMatch(entityTokens, entityText));
+        if (params.includeMatches()) {
+            if (tagSet.getMatchCollection() == null) {
+                tagSet.setMatchCollection(new NlpMatchCollection());
+            }
+            tagSet.getMatchCollection().setTotal(tagSet.getMatchCollection().getTotal()+1);
+            if (CollectionUtils.size(tagSet.getMatchCollection().getMatches()) < params.getMaxContentMatches()) {
+                tagSet.getMatchCollection().getMatches().add(createMatch(entityTokens, entityText));
+            }
         }
     }
 

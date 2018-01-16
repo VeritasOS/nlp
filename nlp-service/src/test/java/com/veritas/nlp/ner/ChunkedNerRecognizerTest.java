@@ -2,6 +2,7 @@ package com.veritas.nlp.ner;
 
 
 import com.veritas.nlp.models.NlpMatch;
+import com.veritas.nlp.models.NlpMatchCollection;
 import com.veritas.nlp.models.NlpTagSet;
 import com.veritas.nlp.models.NlpTagType;
 import com.veritas.nlp.resources.NlpRequestParams;
@@ -35,6 +36,7 @@ public class ChunkedNerRecognizerTest {
 
         assertThat(entities).hasSize(1);
         assertThat(entities.get(NlpTagType.PERSON).getTags()).containsExactly("Joe Bloggs");
+        assertThat(entities.get(NlpTagType.PERSON).getMatchCollection()).isNull();
     }
 
     @Test
@@ -118,10 +120,11 @@ public class ChunkedNerRecognizerTest {
         addContent(recognizer, "My name is the amazing Joe Bloggs and I am a fairly anonymous person.");
         Map<NlpTagType, NlpTagSet> entities = recognizer.getEntities();
 
-        List<NlpMatch> matches = entities.get(NlpTagType.PERSON).getMatches();
-        assertThat(matches).hasSize(1);
+        NlpMatchCollection matchCollection = entities.get(NlpTagType.PERSON).getMatchCollection();
+        assertThat(matchCollection.getTotal()).isEqualTo(1);
+        assertThat(matchCollection.getMatches()).hasSize(1);
 
-        NlpMatch matchForJoe = matches.get(0);
+        NlpMatch matchForJoe = matchCollection.getMatches().get(0);
         assertThat(matchForJoe.getContent()).isEqualTo("Joe Bloggs");
         assertThat(matchForJoe.getOffset()).isEqualTo(23);
         assertThat(matchForJoe.getLength()).isEqualTo(10);
@@ -141,10 +144,11 @@ public class ChunkedNerRecognizerTest {
         addContent(recognizer, "My name is the amazing Joe Bloggs and I am a fairly anonymous person.");
         Map<NlpTagType, NlpTagSet> entities = recognizer.getEntities();
 
-        List<NlpMatch> matches = entities.get(NlpTagType.PERSON).getMatches();
-        assertThat(matches).hasSize(1);
+        NlpMatchCollection matchCollection = entities.get(NlpTagType.PERSON).getMatchCollection();
+        assertThat(matchCollection.getTotal()).isEqualTo(1);
+        assertThat(matchCollection.getMatches()).hasSize(1);
 
-        NlpMatch matchForJoe = matches.get(0);
+        NlpMatch matchForJoe = matchCollection.getMatches().get(0);
         assertThat(matchForJoe.getContent()).isEqualTo("Joe Bloggs");
         assertThat(matchForJoe.getOffset()).isEqualTo(charsAdded + 23);
         assertThat(matchForJoe.getLength()).isEqualTo(10);
@@ -158,7 +162,8 @@ public class ChunkedNerRecognizerTest {
         addContent(recognizer, "My name is Joe Bloggs and my dad is also called Joe Bloggs.  My grandfather was also Joe bloggs.");
         Map<NlpTagType, NlpTagSet> entities = recognizer.getEntities();
 
-        assertThat(entities.get(NlpTagType.PERSON).getMatches()).hasSize(3);
+        assertThat(entities.get(NlpTagType.PERSON).getMatchCollection().getMatches()).hasSize(3);
+        assertThat(entities.get(NlpTagType.PERSON).getMatchCollection().getTotal()).isEqualTo(3);
     }
 
     private ChunkedNerRecognizer createPersonRecognizer() {
