@@ -1,11 +1,10 @@
 package com.veritas.nlp.ner;
 
 import com.google.common.base.Enums;
+import com.google.common.base.Stopwatch;
 import com.google.common.base.Suppliers;
-import com.veritas.nlp.models.NlpMatch;
-import com.veritas.nlp.models.NlpMatchCollection;
-import com.veritas.nlp.models.NlpTagSet;
-import com.veritas.nlp.models.NlpTagType;
+import com.veritas.nlp.models.*;
+import com.veritas.nlp.relations.RelationshipRecognizer;
 import com.veritas.nlp.resources.NlpRequestParams;
 import edu.stanford.nlp.ie.crf.CRFClassifier;
 import edu.stanford.nlp.ie.crf.CRFCliqueTree;
@@ -14,37 +13,70 @@ import edu.stanford.nlp.ling.CoreLabel;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
-class StanfordEntityRecogniser {
-    private static final String NER_3_CLASSIFIER_PATH = "edu/stanford/nlp/models/ner/english.all.3class.distsim.crf.ser.gz";
+
+public class StanfordEntityRecogniser {
+    public static final String NER_3_CLASSIFIER_PATH = "edu/stanford/nlp/models/ner/english.all.3class.distsim.crf.ser.gz";
     private static final Supplier<CRFClassifier<CoreLabel>> classifier = Suppliers.memoize(StanfordEntityRecogniser::createClassifier);
     private static final int CONTEXT_BEFORE_CHARS = 150;
     private static final int CONTEXT_AFTER_CHARS = 150;
+    private static final int MAX_SENTENCE_TOKENS_FOR_OPENIE = 50;
+    private static final int MAX_SENTENCE_TOKENS_FOR_NER = 300;
 
     private final Map<NlpTagType, NlpTagSet> entities;
+    private final Set<Relationship> relationships;
     private final String text;
     private final NlpRequestParams params;
     private final long matchBaseOffset;
 
-    StanfordEntityRecogniser(Map<NlpTagType, NlpTagSet> entities, String text, NlpRequestParams params, long matchBaseOffset) {
+    StanfordEntityRecogniser(
+            Map<NlpTagType, NlpTagSet> entities,
+            String text,
+            NlpRequestParams params,
+            long matchBaseOffset,
+            Set<Relationship> relationships) {
+
         this.entities = entities;
         this.text = text;
         this.params = params;
         this.matchBaseOffset = matchBaseOffset;
+        this.relationships = relationships;
     }
 
     void extractEntities() {
+        Stopwatch sw = Stopwatch.createStarted();
+        //System.out.println("Extracting entities for text: " + text);
         extractEntities(classifier.get().classify(text));
+        //dumpRelationshipsWithEntities(text);
+        System.out.println("DONE IN " + sw.elapsed(TimeUnit.MILLISECONDS));
     }
 
     private void extractEntities(List<List<CoreLabel>> sentences) {
-        for (List<CoreLabel> sentence : sentences) {
-            getEntitiesForSentence(sentence);
+        //System.out.println("SENTENCES: " + sentences.size());
+        RelationshipRecognizer relationshipRecognizer = new RelationshipRecognizer(entities, relationships);
+        for (int i=0; i < sentences.size(); i++) {
+            //List<CoreLabel> previousSentence = i == 0 ? Collections.emptyList() : sentences.get(i-1);
+            List<CoreLabel> sentence = sentences.get(i);
+            List<CoreLabel> nextSentence = (i == sentences.size()-1) ? Collections.emptyList() : sentences.get(i+1);
+
+            //getEntitiesForSentence(previousSentence, sentence, nextSentence);
+            //getEntitiesForSentence(Collections.emptyList(), sentence, Collections.emptyList());
+            getEntitiesForSentence(relationshipRecognizer, Collections.emptyList(), sentence, nextSentence);
         }
+        relationshipRecognizer.dumpTimings();
     }
 
-    private void getEntitiesForSentence(List<CoreLabel> sentence) {
+    private void getEntitiesForSentence(
+            RelationshipRecognizer relationshipRecognizer,
+            List<CoreLabel> previousSentence,
+            List<CoreLabel> sentence,
+            List<CoreLabel> nextSentence) {
+
+        if (sentence.size() > MAX_SENTENCE_TOKENS_FOR_NER) {
+            return;
+        }
 
         // The API for extraction of the named entities is a bit strange.  We have to look for sequences of words
         // with particular entity type.  For example a sequence of three words of entity type PERSON is considered a
@@ -55,6 +87,7 @@ class StanfordEntityRecogniser {
         // words separately so we don't have to deal with whitespace at all.
         //
         CRFCliqueTree<String> cliqueTree = null;
+        boolean sentenceHasEntities = false;
 
         for (int wordPos = 0; wordPos < sentence.size(); wordPos++) {
             CoreLabel word = sentence.get(wordPos);
@@ -63,6 +96,7 @@ class StanfordEntityRecogniser {
             NlpTagType entityType = getEntityType(word);
 
             while (params.getTagTypes().contains(entityType)) {
+                sentenceHasEntities = true;
                 if (entityTokens == null) {
                     entityTokens = new ArrayList<>();
                 }
@@ -101,7 +135,16 @@ class StanfordEntityRecogniser {
                 }
             }
         }
+
+        if (sentenceHasEntities && sentence.size() < MAX_SENTENCE_TOKENS_FOR_OPENIE) {
+            relationshipRecognizer.findRelationships(
+                    previousSentence.size() < MAX_SENTENCE_TOKENS_FOR_OPENIE ? previousSentence : Collections.emptyList(),
+                    sentence,
+                    nextSentence.size() < MAX_SENTENCE_TOKENS_FOR_OPENIE ? nextSentence : Collections.emptyList());
+
+        }
     }
+
 
     private void addEntity(NlpTagSet tagSet, List<EntityToken> entityTokens) {
         String entityText = getText(entityTokens);
@@ -132,6 +175,10 @@ class StanfordEntityRecogniser {
 
     private NlpTagType getEntityType(CoreLabel coreLabel) {
         String entityTypeString = coreLabel.get(CoreAnnotations.AnswerAnnotation.class);
+        return getEntityType(entityTypeString);
+    }
+
+    private NlpTagType getEntityType(String entityTypeString) {
         return Enums.getIfPresent(NlpTagType.class, entityTypeString).orNull();
     }
 

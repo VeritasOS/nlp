@@ -11,7 +11,6 @@ import org.testng.annotations.Test;
 
 import java.time.Duration;
 import java.util.EnumSet;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.IntStream;
@@ -32,7 +31,7 @@ public class ChunkedNerRecognizerTest {
     public void canRecognizeName() throws Exception {
         ChunkedNerRecognizer recognizer = createPersonRecognizer();
         addContent(recognizer, "My name is Joe Bloggs");
-        Map<NlpTagType, NlpTagSet> entities = recognizer.getEntities();
+        Map<NlpTagType, NlpTagSet> entities = recognizer.finalizeNer().getEntities();
 
         assertThat(entities).hasSize(1);
         assertThat(entities.get(NlpTagType.PERSON).getTags()).containsExactly("Joe Bloggs");
@@ -44,7 +43,7 @@ public class ChunkedNerRecognizerTest {
         ChunkedNerRecognizer recognizer = createPersonRecognizer();
         addContent(recognizer, "My name is Joe ");
         addContent(recognizer, "Bloggs");
-        Map<NlpTagType, NlpTagSet> entities = recognizer.getEntities();
+        Map<NlpTagType, NlpTagSet> entities = recognizer.finalizeNer().getEntities();
 
         assertThat(entities).hasSize(1);
         assertThat(entities.get(NlpTagType.PERSON).getTags()).containsExactly("Joe Bloggs");
@@ -58,7 +57,7 @@ public class ChunkedNerRecognizerTest {
             sb.append("My name is Joe Bloggs. ");
         }
         addContent(recognizer, sb.toString());
-        Map<NlpTagType, NlpTagSet> entities = recognizer.getEntities();
+        Map<NlpTagType, NlpTagSet> entities = recognizer.finalizeNer().getEntities();
 
         assertThat(entities).hasSize(1);
         assertThat(entities.get(NlpTagType.PERSON).getTags()).containsExactly("Joe Bloggs");
@@ -69,20 +68,20 @@ public class ChunkedNerRecognizerTest {
         ChunkedNerRecognizer recognizer = createPersonRecognizer();
         addContent(recognizer, "It's a nice day today");
 
-        assertThat(recognizer.getEntities()).isEmpty();
+        assertThat(recognizer.finalizeNer().getEntities()).isEmpty();
     }
 
     @Test
     public void noEntitiesIfNoContentAdded() throws Exception {
         ChunkedNerRecognizer recognizer = createPersonRecognizer();
-        assertThat(recognizer.getEntities()).isEmpty();
+        assertThat(recognizer.finalizeNer().getEntities()).isEmpty();
     }
 
     @Test
     public void noEntitiesIfTextEmpty() throws Exception {
         ChunkedNerRecognizer recognizer = createPersonRecognizer();
         addContent(recognizer, "");
-        assertThat(recognizer.getEntities()).isEmpty();
+        assertThat(recognizer.finalizeNer().getEntities()).isEmpty();
     }
 
     @Test(expectedExceptions = TimeoutException.class)
@@ -93,7 +92,7 @@ public class ChunkedNerRecognizerTest {
             addContent(recognizer, "My name is Joe Bloggs ");
         }
 
-        recognizer.getEntities();
+        recognizer.finalizeNer();
     }
 
     @Test
@@ -108,7 +107,7 @@ public class ChunkedNerRecognizerTest {
         int chunkSize = 1000;
         ChunkedNerRecognizer recognizer = new ChunkedNerRecognizer(chunkSize, params);
         addContent(recognizer, sb.toString());
-        Map<NlpTagType, NlpTagSet> entities = recognizer.getEntities();
+        Map<NlpTagType, NlpTagSet> entities = recognizer.finalizeNer().getEntities();
 
         assertThat(entities).hasSize(1);
         assertThat(entities.get(NlpTagType.PERSON).getTags()).containsExactly("Joe Bloggs");
@@ -118,7 +117,7 @@ public class ChunkedNerRecognizerTest {
     public void canGetMatchDetailsForName() throws Exception {
         ChunkedNerRecognizer recognizer = createPersonRecognizerWithMatches();
         addContent(recognizer, "My name is the amazing Joe Bloggs and I am a fairly anonymous person.");
-        Map<NlpTagType, NlpTagSet> entities = recognizer.getEntities();
+        Map<NlpTagType, NlpTagSet> entities = recognizer.finalizeNer().getEntities();
 
         NlpMatchCollection matchCollection = entities.get(NlpTagType.PERSON).getMatchCollection();
         assertThat(matchCollection.getTotal()).isEqualTo(1);
@@ -142,7 +141,7 @@ public class ChunkedNerRecognizerTest {
             charsAdded += fillerTextPart.length();
         }
         addContent(recognizer, "My name is the amazing Joe Bloggs and I am a fairly anonymous person.");
-        Map<NlpTagType, NlpTagSet> entities = recognizer.getEntities();
+        Map<NlpTagType, NlpTagSet> entities = recognizer.finalizeNer().getEntities();
 
         NlpMatchCollection matchCollection = entities.get(NlpTagType.PERSON).getMatchCollection();
         assertThat(matchCollection.getTotal()).isEqualTo(1);
@@ -160,7 +159,7 @@ public class ChunkedNerRecognizerTest {
     public void multipleMatchesForSingleNameAreReturnedAndAreCaseInsensitive() throws Exception {
         ChunkedNerRecognizer recognizer = createPersonRecognizerWithMatches();
         addContent(recognizer, "My name is Joe Bloggs and my dad is also called Joe Bloggs.  My grandfather was also Joe bloggs.");
-        Map<NlpTagType, NlpTagSet> entities = recognizer.getEntities();
+        Map<NlpTagType, NlpTagSet> entities = recognizer.finalizeNer().getEntities();
 
         assertThat(entities.get(NlpTagType.PERSON).getMatchCollection().getMatches()).hasSize(3);
         assertThat(entities.get(NlpTagType.PERSON).getMatchCollection().getTotal()).isEqualTo(3);

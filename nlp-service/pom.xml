@@ -11,7 +11,7 @@
     <java.version>1.8</java.version>
 
     <!-- Third-party dependencies -->
-    <stanfordnlp.version>3.8.0</stanfordnlp.version>
+    <stanfordnlp.version>3.9.1</stanfordnlp.version>
     <dropwizard.version>1.2.0</dropwizard.version>
     <apachecommonslang.version>3.6</apachecommonslang.version>
     <apachecommonscollections.version>4.1</apachecommonscollections.version>
@@ -248,12 +248,15 @@
             <configuration>
               <!-- stanford models jar is huge - just take the individual files we need from it -->
               <filters>
-                <filter>
-                  <artifact>edu.stanford.nlp:stanford-corenlp:models</artifact>
-                  <includes>
-                    <include>edu/stanford/nlp/models/ner/english.all.3class.distsim.crf.ser.gz</include>
-                  </includes>
-                </filter>
+                <!-- Remove filter for now as we don't know exactly what we need for OpenIE.
+                     TODO: Work out minimum models required for OpenIE
+                -->
+                <!--<filter>-->
+                  <!--<artifact>edu.stanford.nlp:stanford-corenlp:models</artifact>-->
+                  <!--<includes>-->
+                    <!--<include>edu/stanford/nlp/models/ner/english.all.3class.distsim.crf.ser.gz</include>-->
+                  <!--</includes>-->
+                <!--</filter>-->
                 <filter>
                   <artifact>*:*</artifact>
                   <excludes>

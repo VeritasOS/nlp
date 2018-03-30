@@ -1,7 +1,5 @@
 package com.veritas.nlp.ner;
 
-import com.veritas.nlp.models.NlpTagSet;
-import com.veritas.nlp.models.NlpTagType;
 import com.veritas.nlp.resources.ErrorCode;
 import com.veritas.nlp.resources.NlpRequestParams;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -11,7 +9,6 @@ import org.apache.commons.io.input.BOMInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 
 /**
  * Reads text from a supplied stream and extracts named entities from it.
@@ -31,7 +28,7 @@ public class StreamingNerRecognizer {
     }
 
     @SuppressFBWarnings(value = "OS_OPEN_STREAM", justification = "Caller owns the stream, so is responsible for closing it.")
-    public Map<NlpTagType, NlpTagSet> extractEntities(
+    public NerRecognizerResult extractEntities(
             InputStream textStream, NlpRequestParams params) throws Exception {
 
         ChunkedNerRecognizer chunkedNerRecognizer = new ChunkedNerRecognizer(nerSettings.getNerChunkSizeChars(), params);
@@ -56,7 +53,7 @@ public class StreamingNerRecognizer {
             }
         }
 
-        return chunkedNerRecognizer.getEntities();
+        return chunkedNerRecognizer.finalizeNer();
     }
 
     private void checkContentNotTooLarge(long sizeChars) throws NerException {

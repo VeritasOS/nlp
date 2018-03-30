@@ -13,8 +13,8 @@ import javax.ws.rs.core.Response;
 
 import com.veritas.nlp.models.ErrorResponse;
 import com.veritas.nlp.models.NerResult;
-import com.veritas.nlp.models.NlpTagSet;
 import com.veritas.nlp.models.NlpTagType;
+import com.veritas.nlp.ner.NerRecognizerResult;
 import com.veritas.nlp.ner.StreamingNerRecognizer;
 import com.veritas.nlp.service.NlpServiceSettings;
 import io.swagger.annotations.*;
@@ -70,9 +70,9 @@ public class NerResource {
             .setTimeout(Duration.ofSeconds(timeoutSeconds));
 
         StreamingNerRecognizer nerRecognizer = new StreamingNerRecognizer(settings.getNerSettings());
-        Map<NlpTagType, NlpTagSet> tagSets = nerRecognizer.extractEntities(documentStream, params);
+        NerRecognizerResult nerRecognizerResult = nerRecognizer.extractEntities(documentStream, params);
 
-        return Response.ok(new NerResult(tagSets))
+        return Response.ok(new NerResult(nerRecognizerResult.getEntities(), nerRecognizerResult.getRelationships()))
                 .type(MediaType.APPLICATION_JSON)
                 .build();
     }

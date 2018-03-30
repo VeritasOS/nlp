@@ -43,7 +43,7 @@ public class StreamingNerRecognizerTest {
             StreamingNerRecognizer recognizer = new StreamingNerRecognizer(100, DEFAULT_NER_SETTINGS);
 
             Map<NlpTagType, NlpTagSet> entities = recognizer.extractEntities(
-                    new ByteArrayInputStream("My name is Sue Jones.".getBytes(charsetName)), params);
+                    new ByteArrayInputStream("My name is Sue Jones.".getBytes(charsetName)), params).getEntities();
 
             assertThat(entities.get(NlpTagType.PERSON).getTags()).containsExactly("Sue Jones");
         }
@@ -72,7 +72,7 @@ public class StreamingNerRecognizerTest {
             outputStream.close();
         });
 
-        Map<NlpTagType, NlpTagSet> entities = recognizer.extractEntities(inputStream, params);
+        Map<NlpTagType, NlpTagSet> entities = recognizer.extractEntities(inputStream, params).getEntities();
         assertThat(entities.get(NlpTagType.PERSON).getTags()).containsExactly("Joe Bloggs");
     }
 

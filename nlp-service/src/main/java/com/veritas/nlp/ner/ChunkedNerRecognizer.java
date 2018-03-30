@@ -2,15 +2,13 @@ package com.veritas.nlp.ner;
 
 import com.veritas.nlp.models.NlpTagSet;
 import com.veritas.nlp.models.NlpTagType;
+import com.veritas.nlp.models.Relationship;
 import com.veritas.nlp.resources.NlpRequestParams;
 import com.veritas.nlp.text.SmartTextSplitter;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeoutException;
 
 /**
@@ -21,6 +19,7 @@ class ChunkedNerRecognizer {
     private static final int SEARCH_SENTENCE_BOUNDARY_MAX_CHARS = 200;
     private final StringBuilder toBeProcessed = new StringBuilder();
     private final Map<NlpTagType, NlpTagSet> entitiesMap = new HashMap<>();
+    private final Set<Relationship> relationships = new HashSet<>();
     private final int chunkSize;
     private final NlpRequestParams params;
     private final Instant startTime = Instant.now();
@@ -45,9 +44,9 @@ class ChunkedNerRecognizer {
         processText(false);
     }
 
-    Map<NlpTagType, NlpTagSet> getEntities() throws Exception {
+    NerRecognizerResult finalizeNer() throws Exception {
         processText(true);
-        return entitiesMap;
+        return new NerRecognizerResult(entitiesMap, relationships);
     }
 
     private void processText(boolean finalize) throws Exception {
@@ -78,7 +77,7 @@ class ChunkedNerRecognizer {
     private void extractEntities(CharSequence text, long matchBaseOffsetForChunk) throws Exception {
         checkTimeout();
         StanfordEntityRecogniser recogniser = new StanfordEntityRecogniser(
-                entitiesMap, text.toString(), params, matchBaseOffsetForChunk);
+                entitiesMap, text.toString(), params, matchBaseOffsetForChunk, relationships);
         recogniser.extractEntities();
     }
 
@@ -87,4 +86,5 @@ class ChunkedNerRecognizer {
             throw new TimeoutException();
         }
     }
+
 }
