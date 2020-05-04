@@ -89,19 +89,19 @@ public class NlpServiceIT {
     @Test
     public void canApplyMinConfidenceToNameRecognition() throws Exception {
         // The lower case b in bloggs reduces the confidence of 'Joe bloggs' as a name.
-        String content = "My name is Joe bloggs, and my sister is Jane Bloggs.  We live in Sydney, Australia.";
+        String content = "this sentence is for testing name  Joe bliggs, and his sister Jane Bloggs.  They live in Sydney, Australia.";
 
         // No minimum confidence - should get both Joe and Jane
         int minConfidencePercentage = 0;
         Map<NlpTagType, NlpTagSet> entityMap = extractNames(content, StandardCharsets.UTF_8, EnumSet.of(NlpTagType.PERSON), minConfidencePercentage);
         Set<String> people = entityMap.get(NlpTagType.PERSON).getTags();
-        assertThat(people).containsExactlyInAnyOrder("Joe bloggs", "Jane Bloggs");
+        assertThat(people).containsExactlyInAnyOrder("Joe bliggs", "Jane Bloggs");
 
         // Low minimum confidence - should get both Joe and Jane
         minConfidencePercentage = 50;
         entityMap = extractNames(content, StandardCharsets.UTF_8, EnumSet.of(NlpTagType.PERSON), minConfidencePercentage);
         people = entityMap.get(NlpTagType.PERSON).getTags();
-        assertThat(people).containsExactlyInAnyOrder("Joe bloggs", "Jane Bloggs");
+        assertThat(people).containsExactlyInAnyOrder("Joe bliggs", "Jane Bloggs");
 
         // High minimum confidence - should get only Jane.
         minConfidencePercentage = 99;
