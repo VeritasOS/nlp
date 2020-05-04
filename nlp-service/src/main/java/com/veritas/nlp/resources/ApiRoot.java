@@ -1,5 +1,6 @@
 package com.veritas.nlp.resources;
 
+import io.federecio.dropwizard.swagger.SwaggerOAuth2Configuration;
 import io.federecio.dropwizard.swagger.SwaggerResource;
 import io.federecio.dropwizard.swagger.SwaggerViewConfiguration;
 
@@ -38,7 +39,7 @@ public class ApiRoot {
         if (swaggerUrlPattern == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        return Response.ok(new SwaggerResource(swaggerUrlPattern, swaggerViewConfiguration).get()).build();
+        return Response.ok(new SwaggerResource(swaggerUrlPattern, swaggerViewConfiguration, new SwaggerOAuth2Configuration()).get()).build();
     }
 
     public static void configureSwagger(String urlPattern, SwaggerViewConfiguration viewConfiguration) {

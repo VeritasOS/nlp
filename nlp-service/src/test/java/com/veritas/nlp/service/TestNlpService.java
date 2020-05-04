@@ -40,7 +40,7 @@ class TestNlpService {
         ));
     }
 
-    void start() {
+    void start() throws Exception {
         testSupport = new DropwizardTestSupport<>(
                 NlpMicroService.class, configPath, configOverrides.toArray(new ConfigOverride[0]));
         testSupport.before();
