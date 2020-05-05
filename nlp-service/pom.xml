@@ -35,7 +35,7 @@
     <resources.version>2.7</resources.version>
     <exec.plugin.version>1.6.0</exec.plugin.version>
     <assembly.version>2.6</assembly.version>
-    <maven-release.version>2.5.3</maven-release.version>
+    <maven-release.version>3.0.0-M1</maven-release.version>
     <surefire.version>2.19.1</surefire.version>
     <failsafe.version>2.19.1</failsafe.version>
     <antrun.version>1.8</antrun.version>
