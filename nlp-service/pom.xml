@@ -16,7 +16,7 @@
     <dropwizard.swagger.version>2.0.0-1</dropwizard.swagger.version>
     <swagger-annotations.version>2.1.2</swagger-annotations.version>
     <apachecommonscollections.version>4.3</apachecommonscollections.version>
-    <apachecommonsio.version>2.6</apachecommonsio.version>
+    <apachecommonsio.version>2.7</apachecommonsio.version>
     <assertj-core.version>3.15.0</assertj-core.version>
     <findbugs.annotations.version>3.0.0</findbugs.annotations.version>
 
