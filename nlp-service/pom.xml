@@ -11,34 +11,31 @@
     <java.version>1.8</java.version>
 
     <!-- Third-party dependencies -->
-    <stanfordnlp.version>4.0.0</stanfordnlp.version>
-    <dropwizard.version>2.0.9</dropwizard.version>
-    <dropwizard.swagger.version>2.0.0-1</dropwizard.swagger.version>
-    <swagger-annotations.version>2.1.2</swagger-annotations.version>
-    <apachecommonscollections.version>4.3</apachecommonscollections.version>
-    <apachecommonsio.version>2.7</apachecommonsio.version>
-    <assertj-core.version>3.15.0</assertj-core.version>
-    <findbugs.annotations.version>3.0.0</findbugs.annotations.version>
+    <stanford-corenlp.version>4.2.2</stanford-corenlp.version>
+    <dropwizard.version>2.0.22</dropwizard.version>
+    <dropwizard-swagger.version>2.0.0-1</dropwizard-swagger.version>
+    <swagger-annotations.version>2.1.9</swagger-annotations.version>
+    <commons-collections4.version>4.4</commons-collections4.version>
+    <commons-io.version>2.9.0</commons-io.version>
 
     <!-- Testing -->
-    <mockito.version>2.7.12</mockito.version>
-    <testng.version>6.11</testng.version>
-    <assertj.version>3.8.0</assertj.version>
+    <mockito.version>2.28.2</mockito.version>
+    <testng.version>6.14.3</testng.version>
+    <assertj-core.version>3.19.0</assertj-core.version>
 
     <!-- Code metrics etc -->
     <findbugs.annotations.version>3.0.1</findbugs.annotations.version>
 
     <!-- Maven plugins -->
-    <compilerplugin.version>2.5.1</compilerplugin.version>
-    <jar.version>2.3.2</jar.version>
-    <shade.version>2.4.3</shade.version>
-    <resources.version>2.7</resources.version>
-    <exec.plugin.version>1.6.0</exec.plugin.version>
-    <assembly.version>2.6</assembly.version>
-    <maven-release.version>2.5.3</maven-release.version>
-    <surefire.version>2.19.1</surefire.version>
-    <failsafe.version>2.19.1</failsafe.version>
-    <antrun.version>1.8</antrun.version>
+    <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+    <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
+    <maven-shade-plugin.version>3.2.4</maven-shade-plugin.version>
+    <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
+    <maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
+    <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
+    <maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
+    <maven-failsafe-plugin.version>2.19.1</maven-failsafe-plugin.version>
+    <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
   </properties>
 
   <scm>
@@ -70,12 +67,12 @@
     <dependency>
       <groupId>edu.stanford.nlp</groupId>
       <artifactId>stanford-corenlp</artifactId>
-      <version>${stanfordnlp.version}</version>
+      <version>${stanford-corenlp.version}</version>
     </dependency>
     <dependency>
       <groupId>edu.stanford.nlp</groupId>
       <artifactId>stanford-corenlp</artifactId>
-      <version>${stanfordnlp.version}</version>
+      <version>${stanford-corenlp.version}</version>
       <classifier>models</classifier>
     </dependency>
     <dependency>
@@ -91,7 +88,7 @@
     <dependency>
       <groupId>com.smoketurner</groupId>
       <artifactId>dropwizard-swagger</artifactId>
-      <version>${dropwizard.swagger.version}</version>
+      <version>${dropwizard-swagger.version}</version>
     </dependency>
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
@@ -121,12 +118,12 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-collections4</artifactId>
-      <version>${apachecommonscollections.version}</version>
+      <version>${commons-collections4.version}</version>
     </dependency>
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-      <version>${apachecommonsio.version}</version>
+      <version>${commons-io.version}</version>
     </dependency>
     <dependency>
       <groupId>com.google.guava</groupId>
@@ -186,8 +183,20 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>${maven-clean-plugin.version}</version>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>${maven-resources-plugin.version}</version>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
-        <version>${maven-release.version}</version>
+        <version>${maven-release-plugin.version}</version>
         <configuration>
           <tagNameFormat>nlp-@{project.version}</tagNameFormat>
           <!-- Don't include sources and javadocs in release -->
@@ -198,7 +207,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>${compilerplugin.version}</version>
+        <version>${maven-compiler-plugin.version}</version>
         <configuration>
           <source>${java.version}</source>
           <target>${java.version}</target>
@@ -207,7 +216,7 @@
 
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>${surefire.version}</version>
+        <version>${maven-surefire-plugin.version}</version>
         <configuration>
           <argLine>-Dfile.encoding=UTF-8</argLine>
         </configuration>
@@ -216,7 +225,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
-        <version>${failsafe.version}</version>
+        <version>${maven-failsafe-plugin.version}</version>
         <configuration>
           <workingDirectory>${project.build.directory}</workingDirectory>
           <argLine>-Dfile.encoding=UTF-8</argLine>
@@ -234,7 +243,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>${jar.version}</version>
+        <version>${maven-jar-plugin.version}</version>
         <configuration>
           <archive>
             <manifest>
@@ -252,7 +261,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>${shade.version}</version>
+        <version>${maven-shade-plugin.version}</version>
         <executions>
           <execution>
             <phase>package</phase>
