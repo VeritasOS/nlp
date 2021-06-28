@@ -12,7 +12,7 @@
 
     <!-- Third-party dependencies -->
     <stanford-corenlp.version>4.2.2</stanford-corenlp.version>
-    <dropwizard.version>2.0.22</dropwizard.version>
+    <dropwizard.version>2.0.23</dropwizard.version>
     <dropwizard-swagger.version>2.0.0-1</dropwizard-swagger.version>
     <swagger-annotations.version>2.1.9</swagger-annotations.version>
     <commons-collections4.version>4.4</commons-collections4.version>
