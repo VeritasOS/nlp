@@ -1,21 +1,78 @@
 package com.veritas.nlp.service;
 
-import com.veritas.nlp.ner.NerSettings;
+import com.codahale.metrics.health.HealthCheck;
+import com.veritas.nlp.models.NlpTagType;
+import com.veritas.nlp.ner.NerException;
 import com.veritas.nlp.resources.NerResource;
+import org.eclipse.jetty.http.HttpStatus;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import javax.ws.rs.core.Response;
+import java.io.InputStream;
+import java.util.EnumSet;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.when;
 
 public class NlpHealthCheckTest {
+    @Mock
+    NerResource nerResource;
+
+    @Mock
+    Response response;
+
+    @InjectMocks
+    NlpHealthCheck nlpHealthCheck;
+
+    @BeforeMethod
+    public void beforeMethod() {
+        MockitoAnnotations.initMocks(this);
+    }
+
+    @AfterMethod
+    public void afterMethod() {
+        nlpHealthCheck = null;
+    }
 
     @Test
     public void checkSucceeds() throws Exception {
-        NlpServiceSettings nlpServiceSettings = new NlpServiceSettings();
-        nlpServiceSettings.setNerSettings(new NerSettings());
+        when(nerResource.extractEntities(any(InputStream.class), isNull(), eq(EnumSet.of(NlpTagType.PERSON)),
+                eq(300), eq(90), eq(false), eq(0)))
+                .thenReturn(response);
+        when(response.getStatus()).thenReturn(HttpStatus.OK_200);
 
-        NlpHealthCheck check = new NlpHealthCheck(new NerResource(nlpServiceSettings));
+        assertThat(nlpHealthCheck.check().isHealthy()).isTrue();
+    }
 
-        assertThat(check.check().isHealthy()).isTrue();
+    @Test
+    public void checkFails() throws Exception {
+        when(nerResource.extractEntities(any(InputStream.class), isNull(), eq(EnumSet.of(NlpTagType.PERSON)),
+                eq(300), eq(90), eq(false), eq(0)))
+                .thenReturn(response);
+        when(response.getStatus()).thenReturn(HttpStatus.NOT_FOUND_404).thenReturn(HttpStatus.NOT_FOUND_404);
+
+        HealthCheck.Result result = nlpHealthCheck.check();
+
+        assertThat(result.isHealthy()).isFalse();
+        assertThat(result.getMessage()).isEqualTo("Named entity recognition failed with status 404");
+    }
+
+    @Test
+    public void checkFailsWithException() throws Exception {
+        when(nerResource.extractEntities(any(InputStream.class), isNull(), eq(EnumSet.of(NlpTagType.PERSON)),
+                eq(300), eq(90), eq(false), eq(0)))
+                .thenThrow(new NerException("Extract entities failed."));
+
+        HealthCheck.Result result = nlpHealthCheck.check();
+
+        assertThat(result.isHealthy()).isFalse();
+        assertThat(result.getError()).isInstanceOf(NerException.class).hasMessageContaining("Extract entities failed.");
+        assertThat(result.getMessage()).contains("Extract entities failed.");
     }
 }
