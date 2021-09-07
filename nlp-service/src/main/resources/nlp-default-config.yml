@@ -16,6 +16,10 @@ logging:
       archivedFileCount: 5
       logFormat: "%d %-5p {%X{processName}} [%.20t] [%c{0}] %m%n%xEx{5}"
 
+  loggers:
+    # Reflection logs annoying warnings so exclude by default
+    "org.reflections": ERROR
+
 server:
   shutdownGracePeriod: 30s
 
