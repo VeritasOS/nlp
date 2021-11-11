@@ -11,7 +11,7 @@
     <java.version>1.8</java.version>
 
     <!-- Third-party dependencies -->
-    <stanford-corenlp.version>4.2.2</stanford-corenlp.version>
+    <stanford-corenlp.version>4.3.1</stanford-corenlp.version>
     <dropwizard.version>2.0.25</dropwizard.version>
     <dropwizard-swagger.version>2.0.0-1</dropwizard-swagger.version>
     <swagger-annotations.version>2.1.9</swagger-annotations.version>
@@ -19,9 +19,9 @@
     <commons-io.version>2.9.0</commons-io.version>
 
     <!-- Testing -->
-    <mockito.version>2.28.2</mockito.version>
-    <testng.version>6.14.3</testng.version>
-    <assertj-core.version>3.19.0</assertj-core.version>
+    <mockito.version>3.12.4</mockito.version>
+    <testng.version>7.4.0</testng.version>
+    <assertj-core.version>3.21.0</assertj-core.version>
 
     <!-- Code metrics etc -->
     <findbugs.annotations.version>3.0.1</findbugs.annotations.version>
@@ -30,11 +30,11 @@
     <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
     <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
     <maven-shade-plugin.version>3.2.4</maven-shade-plugin.version>
-    <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
+    <maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
     <maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
     <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
-    <maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
-    <maven-failsafe-plugin.version>2.19.1</maven-failsafe-plugin.version>
+    <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
+    <maven-failsafe-plugin.version>2.22.2</maven-failsafe-plugin.version>
     <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
   </properties>
 
