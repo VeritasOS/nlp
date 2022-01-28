@@ -11,20 +11,20 @@
     <java.version>1.8</java.version>
 
     <!-- Third-party dependencies -->
-    <stanford-corenlp.version>4.3.1</stanford-corenlp.version>
-    <dropwizard.version>2.0.25</dropwizard.version>
+    <stanford-corenlp.version>4.4.0</stanford-corenlp.version>
+    <dropwizard.version>2.0.28</dropwizard.version>
     <dropwizard-swagger.version>2.0.0-1</dropwizard-swagger.version>
-    <swagger-annotations.version>2.1.9</swagger-annotations.version>
+    <swagger-annotations.version>2.1.12</swagger-annotations.version>
     <commons-collections4.version>4.4</commons-collections4.version>
-    <commons-io.version>2.9.0</commons-io.version>
+    <commons-io.version>2.11.0</commons-io.version>
 
     <!-- Testing -->
     <mockito.version>3.12.4</mockito.version>
-    <testng.version>7.4.0</testng.version>
+    <testng.version>7.5</testng.version>
     <assertj-core.version>3.21.0</assertj-core.version>
 
     <!-- Code metrics etc -->
-    <findbugs.annotations.version>3.0.1</findbugs.annotations.version>
+    <findbugs.annotations.version>3.0.1u2</findbugs.annotations.version>
 
     <!-- Maven plugins -->
     <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
@@ -36,6 +36,11 @@
     <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
     <maven-failsafe-plugin.version>2.22.2</maven-failsafe-plugin.version>
     <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
+    <ossindex-maven-plugin.version>3.1.0</ossindex-maven-plugin.version>
+    <maven-enforcer-plugin.version>3.0.0</maven-enforcer-plugin.version>
+
+    <!-- Maven enforcer versions -->
+    <required-maven.version>3.6</required-maven.version>
   </properties>
 
   <scm>
@@ -344,6 +349,48 @@
             </filter>
           </filters>
         </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.sonatype.ossindex.maven</groupId>
+        <artifactId>ossindex-maven-plugin</artifactId>
+        <version>${ossindex-maven-plugin.version}</version>
+        <configuration>
+          <fail>false</fail>
+        </configuration>
+        <executions>
+          <execution>
+            <id>audit-dependencies</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>audit</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <version>${maven-enforcer-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>enforce-maven</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <requireMavenVersion>
+                  <version>[${required-maven.version},)</version>
+                </requireMavenVersion>
+                <requireJavaVersion>
+                  <version>[${java.version},)</version>
+                </requireJavaVersion>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
