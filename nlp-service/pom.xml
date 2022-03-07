@@ -17,10 +17,12 @@
     <swagger-annotations.version>2.1.12</swagger-annotations.version>
     <commons-collections4.version>4.4</commons-collections4.version>
     <commons-io.version>2.11.0</commons-io.version>
+    <xercesImpl.version>2.12.2</xercesImpl.version>
 
     <!-- Testing -->
-    <mockito.version>3.12.4</mockito.version>
+    <mockito.version>4.3.1</mockito.version>
     <testng.version>7.5</testng.version>
+    <mockito-testng.version>0.4.16</mockito-testng.version>
     <assertj-core.version>3.21.0</assertj-core.version>
 
     <!-- Code metrics etc -->
@@ -100,6 +102,13 @@
       <groupId>edu.stanford.nlp</groupId>
       <artifactId>stanford-corenlp</artifactId>
       <version>${stanford-corenlp.version}</version>
+      <exclusions>
+        <!-- Exclude Apache Xerces2 J 2.8.0 -->
+        <exclusion>
+          <groupId>xerces</groupId>
+          <artifactId>xercesImpl</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>edu.stanford.nlp</groupId>
@@ -189,6 +198,14 @@
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
     </dependency>
+    <!-- Apache Xerces2 J is a transitive dependency from Stanford CoreNLP and has vulnerability CVE-2022-23437 detected in 2.12.1,
+    hence explicitly using higher version here (latest GA version)
+    -->
+    <dependency>
+      <groupId>xerces</groupId>
+      <artifactId>xercesImpl</artifactId>
+      <version>${xercesImpl.version}</version>
+    </dependency>
 
     <!-- Test only -->
     <dependency>
@@ -201,6 +218,12 @@
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
       <version>${mockito.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-testng</artifactId>
+      <version>${mockito-testng.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>

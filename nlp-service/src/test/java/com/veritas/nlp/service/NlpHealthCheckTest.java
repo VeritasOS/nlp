@@ -7,9 +7,10 @@ import com.veritas.nlp.resources.NerResource;
 import org.eclipse.jetty.http.HttpStatus;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.testng.MockitoTestNGListener;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import javax.ws.rs.core.Response;
@@ -17,9 +18,12 @@ import java.io.InputStream;
 import java.util.EnumSet;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.when;
 
+@Listeners(MockitoTestNGListener.class)
 public class NlpHealthCheckTest {
     @Mock
     NerResource nerResource;
@@ -32,7 +36,6 @@ public class NlpHealthCheckTest {
 
     @BeforeMethod
     public void beforeMethod() {
-        MockitoAnnotations.initMocks(this);
     }
 
     @AfterMethod

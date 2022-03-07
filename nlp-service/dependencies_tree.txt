@@ -9,8 +9,6 @@ com.veritas.nlp:nlp-service:jar:0.1.7-SNAPSHOT
 |  +- org.apache.lucene:lucene-core:jar:7.5.0:compile
 |  +- javax.servlet:javax.servlet-api:jar:3.0.1:compile
 |  +- xom:xom:jar:1.3.7:compile
-|  |  +- xerces:xercesImpl:jar:2.8.0:compile
-|  |  |  \- xml-apis:xml-apis:jar:1.3.03:compile
 |  |  \- xalan:xalan:jar:2.7.2:compile
 |  |     \- xalan:serializer:jar:2.7.2:compile
 |  +- joda-time:joda-time:jar:2.10.13:compile
@@ -153,13 +151,16 @@ com.veritas.nlp:nlp-service:jar:0.1.7-SNAPSHOT
 +- com.fasterxml.jackson.core:jackson-annotations:jar:2.10.5:compile
 +- com.fasterxml.jackson.core:jackson-databind:jar:2.10.5.1:compile
 |  \- com.fasterxml.jackson.core:jackson-core:jar:2.10.5:compile
++- xerces:xercesImpl:jar:2.12.2:compile
+|  \- xml-apis:xml-apis:jar:1.4.01:compile
 +- org.testng:testng:jar:7.5:test
 |  +- com.beust:jcommander:jar:1.78:test
 |  \- org.webjars:jquery:jar:3.5.1:test
-+- org.mockito:mockito-core:jar:3.12.4:test
++- org.mockito:mockito-core:jar:4.3.1:test
 |  +- net.bytebuddy:byte-buddy:jar:1.12.5:test
-|  +- net.bytebuddy:byte-buddy-agent:jar:1.11.13:test
+|  +- net.bytebuddy:byte-buddy-agent:jar:1.12.7:test
 |  \- org.objenesis:objenesis:jar:3.2:test
++- org.mockito:mockito-testng:jar:0.4.16:test
 +- org.assertj:assertj-core:jar:3.21.0:test
 \- com.google.code.findbugs:annotations:jar:3.0.1u2:provided
    \- net.jcip:jcip-annotations:jar:1.0:provided
