@@ -40,6 +40,7 @@
     <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
     <ossindex-maven-plugin.version>3.1.0</ossindex-maven-plugin.version>
     <maven-enforcer-plugin.version>3.0.0</maven-enforcer-plugin.version>
+    <jacoco-maven-plugin.version>0.8.7</jacoco-maven-plugin.version>
 
     <!-- Maven enforcer versions -->
     <required-maven.version>3.6</required-maven.version>
@@ -279,7 +280,7 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>${maven-surefire-plugin.version}</version>
         <configuration>
-          <argLine>-Dfile.encoding=UTF-8</argLine>
+          <argLine>${jacocoSurefireArgLine} -Dfile.encoding=UTF-8</argLine>
         </configuration>
       </plugin>
 
@@ -289,7 +290,7 @@
         <version>${maven-failsafe-plugin.version}</version>
         <configuration>
           <workingDirectory>${project.build.directory}</workingDirectory>
-          <argLine>-Dfile.encoding=UTF-8</argLine>
+          <argLine>${jacocoFailsafeArgLine} -Dfile.encoding=UTF-8</argLine>
         </configuration>
         <executions>
           <execution>
@@ -412,6 +413,50 @@
                 </requireJavaVersion>
               </rules>
             </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>${jacoco-maven-plugin.version}</version>
+        <configuration>
+          <skip>false</skip>
+        </configuration>
+        <executions>
+          <execution>
+            <id>pre-unit-test</id>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+            <configuration>
+              <propertyName>jacocoSurefireArgLine</propertyName>
+            </configuration>
+          </execution>
+          <execution>
+            <id>post-unit-test</id>
+            <phase>test</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>pre-integration-test</id>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>prepare-agent-integration</goal>
+            </goals>
+            <configuration>
+              <propertyName>jacocoFailsafeArgLine</propertyName>
+            </configuration>
+          </execution>
+          <execution>
+            <id>post-integration-test</id>
+            <phase>post-integration-test</phase>
+            <goals>
+              <goal>report-integration</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>
