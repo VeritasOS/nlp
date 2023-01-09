@@ -18,12 +18,12 @@
     <commons-collections4.version>4.4</commons-collections4.version>
     <commons-io.version>2.11.0</commons-io.version>
     <xercesImpl.version>2.12.2</xercesImpl.version>
-    <snakeyaml.version>1.32</snakeyaml.version>
+    <snakeyaml.version>1.33</snakeyaml.version>
 
     <!-- Testing -->
-    <mockito.version>4.7.0</mockito.version>
+    <mockito.version>4.10.0</mockito.version>
     <testng.version>7.5</testng.version>
-    <mockito-testng.version>0.4.26</mockito-testng.version>
+    <mockito-testng.version>0.4.31</mockito-testng.version>
     <assertj-core.version>3.23.1</assertj-core.version>
 
     <!-- Code metrics etc -->
@@ -31,8 +31,8 @@
 
     <!-- Maven plugins -->
     <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
-    <maven-jar-plugin.version>3.2.2</maven-jar-plugin.version>
-    <maven-shade-plugin.version>3.3.0</maven-shade-plugin.version>
+    <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
+    <maven-shade-plugin.version>3.4.1</maven-shade-plugin.version>
     <maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
     <maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
     <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
@@ -44,7 +44,7 @@
     <jacoco-maven-plugin.version>0.8.8</jacoco-maven-plugin.version>
 
     <!-- Maven enforcer versions -->
-    <required-maven.version>3.6</required-maven.version>
+    <required-maven.version>3.8</required-maven.version>
   </properties>
 
   <scm>
@@ -423,6 +423,7 @@
               <rules>
                 <requireMavenVersion>
                   <version>[${required-maven.version},)</version>
+                  <message>Invalid Maven version. It should, at least, be ${required-maven.version}.</message>
                 </requireMavenVersion>
                 <requireJavaVersion>
                   <version>[${java.version},)</version>

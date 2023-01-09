@@ -153,15 +153,15 @@ com.veritas.nlp:nlp-service:jar:0.1.10-SNAPSHOT
 |  \- com.fasterxml.jackson.core:jackson-core:jar:2.10.5:compile
 +- xerces:xercesImpl:jar:2.12.2:compile
 |  \- xml-apis:xml-apis:jar:1.4.01:compile
-+- org.yaml:snakeyaml:jar:1.32:compile
++- org.yaml:snakeyaml:jar:1.33:compile
 +- org.testng:testng:jar:7.5:test
 |  +- com.beust:jcommander:jar:1.78:test
 |  \- org.webjars:jquery:jar:3.5.1:test
-+- org.mockito:mockito-core:jar:4.7.0:test
++- org.mockito:mockito-core:jar:4.10.0:test
 |  +- net.bytebuddy:byte-buddy:jar:1.12.18:test
-|  +- net.bytebuddy:byte-buddy-agent:jar:1.12.13:test
-|  \- org.objenesis:objenesis:jar:3.2:test
-+- org.mockito:mockito-testng:jar:0.4.26:test
+|  +- net.bytebuddy:byte-buddy-agent:jar:1.12.19:test
+|  \- org.objenesis:objenesis:jar:3.3:test
++- org.mockito:mockito-testng:jar:0.4.31:test
 +- org.assertj:assertj-core:jar:3.23.1:test
 \- com.google.code.findbugs:annotations:jar:3.0.1u2:provided
    \- net.jcip:jcip-annotations:jar:1.0:provided
