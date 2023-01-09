@@ -1,4 +1,4 @@
-com.veritas.nlp:nlp-service:jar:0.1.9-SNAPSHOT
+com.veritas.nlp:nlp-service:jar:0.1.10-SNAPSHOT
 +- edu.stanford.nlp:stanford-corenlp:jar:4.5.1:compile
 |  +- com.apple:AppleJavaExtensions:jar:1.4:compile
 |  +- de.jollyday:jollyday:jar:0.4.9:compile
@@ -11,7 +11,7 @@ com.veritas.nlp:nlp-service:jar:0.1.9-SNAPSHOT
 |  +- xom:xom:jar:1.3.7:compile
 |  |  \- xalan:xalan:jar:2.7.2:compile
 |  |     \- xalan:serializer:jar:2.7.2:compile
-|  +- joda-time:joda-time:jar:2.11.1:compile
+|  +- joda-time:joda-time:jar:2.12.0:compile
 |  +- org.ejml:ejml-core:jar:0.39:compile
 |  +- org.ejml:ejml-ddense:jar:0.39:compile
 |  +- org.ejml:ejml-simple:jar:0.39:compile
@@ -31,43 +31,43 @@ com.veritas.nlp:nlp-service:jar:0.1.9-SNAPSHOT
 |     \- junit:junit:jar:4.13.2:compile
 |        \- org.hamcrest:hamcrest-core:jar:1.3:compile
 +- edu.stanford.nlp:stanford-corenlp:jar:models:4.5.1:compile
-+- io.dropwizard:dropwizard-core:jar:2.0.33:compile
-|  +- io.dropwizard:dropwizard-util:jar:2.0.33:compile
-|  +- io.dropwizard:dropwizard-jackson:jar:2.0.33:compile
++- io.dropwizard:dropwizard-core:jar:2.0.34:compile
+|  +- io.dropwizard:dropwizard-util:jar:2.0.34:compile
+|  +- io.dropwizard:dropwizard-jackson:jar:2.0.34:compile
 |  |  +- com.github.ben-manes.caffeine:caffeine:jar:2.9.3:compile
 |  |  +- com.fasterxml.jackson.datatype:jackson-datatype-jsr310:jar:2.10.5:compile
 |  |  +- com.fasterxml.jackson.datatype:jackson-datatype-jdk8:jar:2.10.5:compile
 |  |  +- com.fasterxml.jackson.module:jackson-module-parameter-names:jar:2.10.5:compile
 |  |  +- com.fasterxml.jackson.module:jackson-module-afterburner:jar:2.10.5:compile
 |  |  \- com.fasterxml.jackson.datatype:jackson-datatype-joda:jar:2.10.5:compile
-|  +- io.dropwizard:dropwizard-validation:jar:2.0.33:compile
+|  +- io.dropwizard:dropwizard-validation:jar:2.0.34:compile
 |  |  +- com.fasterxml:classmate:jar:1.5.1:compile
 |  |  \- org.glassfish:jakarta.el:jar:3.0.4:compile
-|  +- io.dropwizard:dropwizard-configuration:jar:2.0.33:compile
+|  +- io.dropwizard:dropwizard-configuration:jar:2.0.34:compile
 |  |  +- com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:jar:2.10.5:compile
-|  |  \- org.apache.commons:commons-text:jar:1.9:compile
-|  +- io.dropwizard:dropwizard-logging:jar:2.0.33:compile
+|  |  \- org.apache.commons:commons-text:jar:1.10.0:compile
+|  +- io.dropwizard:dropwizard-logging:jar:2.0.34:compile
 |  |  +- io.dropwizard.metrics:metrics-logback:jar:4.1.33:compile
 |  |  +- org.slf4j:jul-to-slf4j:jar:1.7.36:compile
 |  |  +- ch.qos.logback:logback-core:jar:1.2.11:compile
 |  |  +- io.dropwizard.logback:logback-throttling-appender:jar:1.1.9:compile
 |  |  +- org.slf4j:log4j-over-slf4j:jar:1.7.36:runtime
 |  |  \- org.slf4j:jcl-over-slf4j:jar:1.7.36:runtime
-|  +- io.dropwizard:dropwizard-metrics:jar:2.0.33:compile
-|  +- io.dropwizard:dropwizard-jersey:jar:2.0.33:compile
+|  +- io.dropwizard:dropwizard-metrics:jar:2.0.34:compile
+|  +- io.dropwizard:dropwizard-jersey:jar:2.0.34:compile
 |  |  +- org.glassfish.jersey.ext:jersey-metainf-services:jar:2.33:runtime
 |  |  +- org.glassfish.jersey.inject:jersey-hk2:jar:2.33:runtime
 |  |  |  \- org.glassfish.hk2:hk2-locator:jar:2.6.1:runtime
-|  |  +- org.javassist:javassist:jar:3.29.1-GA:compile
+|  |  +- org.javassist:javassist:jar:3.29.2-GA:compile
 |  |  +- io.dropwizard.metrics:metrics-jersey2:jar:4.1.33:compile
 |  |  +- jakarta.annotation:jakarta.annotation-api:jar:1.3.5:compile
 |  |  +- org.glassfish.hk2:hk2-api:jar:2.6.1:compile
 |  |  |  +- org.glassfish.hk2:hk2-utils:jar:2.6.1:compile
 |  |  |  \- org.glassfish.hk2.external:aopalliance-repackaged:jar:2.6.1:compile
 |  |  \- org.glassfish.jersey.containers:jersey-container-servlet:jar:2.33:runtime
-|  +- io.dropwizard:dropwizard-servlets:jar:2.0.33:compile
-|  +- io.dropwizard:dropwizard-jetty:jar:2.0.33:compile
-|  +- io.dropwizard:dropwizard-lifecycle:jar:2.0.33:compile
+|  +- io.dropwizard:dropwizard-servlets:jar:2.0.34:compile
+|  +- io.dropwizard:dropwizard-jetty:jar:2.0.34:compile
+|  +- io.dropwizard:dropwizard-lifecycle:jar:2.0.34:compile
 |  +- io.dropwizard.metrics:metrics-core:jar:4.1.33:compile
 |  +- io.dropwizard.metrics:metrics-jetty9:jar:4.1.33:compile
 |  +- io.dropwizard.metrics:metrics-jvm:jar:4.1.33:compile
@@ -76,7 +76,7 @@ com.veritas.nlp:nlp-service:jar:0.1.9-SNAPSHOT
 |  |  +- io.dropwizard.metrics:metrics-json:jar:4.1.33:compile
 |  |  \- com.helger:profiler:jar:1.1.1:compile
 |  +- io.dropwizard.metrics:metrics-healthchecks:jar:4.1.33:compile
-|  +- io.dropwizard:dropwizard-request-logging:jar:2.0.33:compile
+|  +- io.dropwizard:dropwizard-request-logging:jar:2.0.34:compile
 |  |  \- ch.qos.logback:logback-access:jar:1.2.11:compile
 |  +- ch.qos.logback:logback-classic:jar:1.2.11:compile
 |  +- com.google.code.findbugs:jsr305:jar:3.0.2:compile
@@ -84,8 +84,8 @@ com.veritas.nlp:nlp-service:jar:0.1.9-SNAPSHOT
 |  +- jakarta.validation:jakarta.validation-api:jar:2.0.2:compile
 |  +- jakarta.ws.rs:jakarta.ws.rs-api:jar:2.1.6:compile
 |  +- net.sourceforge.argparse4j:argparse4j:jar:0.8.1:compile
-|  +- org.eclipse.jetty:jetty-security:jar:9.4.48.v20220622:compile
-|  +- org.eclipse.jetty:jetty-util:jar:9.4.48.v20220622:compile
+|  +- org.eclipse.jetty:jetty-security:jar:9.4.49.v20220914:compile
+|  +- org.eclipse.jetty:jetty-util:jar:9.4.49.v20220914:compile
 |  +- org.eclipse.jetty.toolchain.setuid:jetty-setuid-java:jar:1.0.4:compile
 |  +- org.glassfish.hk2.external:jakarta.inject:jar:2.6.1:compile
 |  +- org.glassfish.jersey.core:jersey-common:jar:2.33:compile
@@ -93,12 +93,12 @@ com.veritas.nlp:nlp-service:jar:0.1.9-SNAPSHOT
 |  +- org.glassfish.jersey.ext:jersey-bean-validation:jar:2.33:compile
 |  \- org.hibernate.validator:hibernate-validator:jar:6.1.7.Final:compile
 |     \- org.jboss.logging:jboss-logging:jar:3.3.2.Final:compile
-+- io.dropwizard:dropwizard-testing:jar:2.0.33:test
++- io.dropwizard:dropwizard-testing:jar:2.0.34:test
 |  +- io.dropwizard.metrics:metrics-annotation:jar:4.1.33:compile
 |  +- com.fasterxml.jackson.datatype:jackson-datatype-guava:jar:2.10.5:compile
 |  +- com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:jar:2.10.5:compile
 |  |  \- com.fasterxml.jackson.jaxrs:jackson-jaxrs-base:jar:2.10.5:compile
-|  +- org.eclipse.jetty:jetty-io:jar:9.4.48.v20220622:compile
+|  +- org.eclipse.jetty:jetty-io:jar:9.4.49.v20220914:compile
 |  +- org.glassfish.jersey.core:jersey-server:jar:2.33:compile
 |  +- org.glassfish.jersey.test-framework:jersey-test-framework-core:jar:2.33:test
 |  |  \- org.glassfish.jersey.media:jersey-media-jaxb:jar:2.33:test
@@ -106,11 +106,11 @@ com.veritas.nlp:nlp-service:jar:0.1.9-SNAPSHOT
 |  +- jakarta.activation:jakarta.activation-api:jar:1.2.2:runtime
 |  \- jakarta.xml.bind:jakarta.xml.bind-api:jar:2.3.3:runtime
 +- com.smoketurner:dropwizard-swagger:jar:2.0.0-1:compile
-|  +- io.dropwizard:dropwizard-auth:jar:2.0.33:compile
+|  +- io.dropwizard:dropwizard-auth:jar:2.0.34:compile
 |  |  \- io.dropwizard.metrics:metrics-caffeine:jar:4.1.33:compile
-|  +- io.dropwizard:dropwizard-assets:jar:2.0.33:compile
-|  +- io.dropwizard:dropwizard-views:jar:2.0.33:compile
-|  +- io.dropwizard:dropwizard-views-freemarker:jar:2.0.33:compile
+|  +- io.dropwizard:dropwizard-assets:jar:2.0.34:compile
+|  +- io.dropwizard:dropwizard-views:jar:2.0.34:compile
+|  +- io.dropwizard:dropwizard-views-freemarker:jar:2.0.34:compile
 |  |  \- org.freemarker:freemarker:jar:2.3.31:compile
 |  \- io.swagger:swagger-jersey2-jaxrs:jar:1.6.0:compile
 |     \- io.swagger:swagger-jaxrs:jar:1.6.0:compile
@@ -119,14 +119,14 @@ com.veritas.nlp:nlp-service:jar:0.1.9-SNAPSHOT
 |        |  |  \- io.swagger:swagger-annotations:jar:1.6.0:compile
 |        |  \- javax.validation:validation-api:jar:1.1.0.Final:compile
 |        \- org.reflections:reflections:jar:0.9.11:compile
-+- org.eclipse.jetty:jetty-server:jar:9.4.48.v20220622:compile
-|  \- org.eclipse.jetty:jetty-http:jar:9.4.48.v20220622:compile
-+- org.eclipse.jetty:jetty-servlet:jar:9.4.48.v20220622:compile
-|  \- org.eclipse.jetty:jetty-util-ajax:jar:9.4.48.v20220622:compile
-+- org.eclipse.jetty:jetty-servlets:jar:9.4.48.v20220622:compile
-|  \- org.eclipse.jetty:jetty-continuation:jar:9.4.48.v20220622:compile
-+- org.eclipse.jetty:jetty-webapp:jar:9.4.48.v20220622:compile
-|  \- org.eclipse.jetty:jetty-xml:jar:9.4.48.v20220622:compile
++- org.eclipse.jetty:jetty-server:jar:9.4.49.v20220914:compile
+|  \- org.eclipse.jetty:jetty-http:jar:9.4.49.v20220914:compile
++- org.eclipse.jetty:jetty-servlet:jar:9.4.49.v20220914:compile
+|  \- org.eclipse.jetty:jetty-util-ajax:jar:9.4.49.v20220914:compile
++- org.eclipse.jetty:jetty-servlets:jar:9.4.49.v20220914:compile
+|  \- org.eclipse.jetty:jetty-continuation:jar:9.4.49.v20220914:compile
++- org.eclipse.jetty:jetty-webapp:jar:9.4.49.v20220914:compile
+|  \- org.eclipse.jetty:jetty-xml:jar:9.4.49.v20220914:compile
 +- io.swagger.core.v3:swagger-annotations:jar:2.1.12:compile
 +- org.apache.commons:commons-lang3:jar:3.12.0:compile
 +- org.apache.commons:commons-collections4:jar:4.4:compile
@@ -134,7 +134,7 @@ com.veritas.nlp:nlp-service:jar:0.1.9-SNAPSHOT
 +- com.google.guava:guava:jar:31.1-jre:compile
 |  +- com.google.guava:failureaccess:jar:1.0.1:compile
 |  +- com.google.guava:listenablefuture:jar:9999.0-empty-to-avoid-conflict-with-guava:compile
-|  +- org.checkerframework:checker-qual:jar:3.25.0:compile
+|  +- org.checkerframework:checker-qual:jar:3.26.0:compile
 |  +- com.google.errorprone:error_prone_annotations:jar:2.10.0:compile
 |  \- com.google.j2objc:j2objc-annotations:jar:1.3:compile
 +- org.glassfish.jersey.core:jersey-client:jar:2.33:compile
@@ -153,15 +153,15 @@ com.veritas.nlp:nlp-service:jar:0.1.9-SNAPSHOT
 |  \- com.fasterxml.jackson.core:jackson-core:jar:2.10.5:compile
 +- xerces:xercesImpl:jar:2.12.2:compile
 |  \- xml-apis:xml-apis:jar:1.4.01:compile
-+- org.yaml:snakeyaml:jar:1.32:compile
++- org.yaml:snakeyaml:jar:1.33:compile
 +- org.testng:testng:jar:7.5:test
 |  +- com.beust:jcommander:jar:1.78:test
 |  \- org.webjars:jquery:jar:3.5.1:test
-+- org.mockito:mockito-core:jar:4.7.0:test
-|  +- net.bytebuddy:byte-buddy:jar:1.12.16:test
-|  +- net.bytebuddy:byte-buddy-agent:jar:1.12.13:test
-|  \- org.objenesis:objenesis:jar:3.2:test
-+- org.mockito:mockito-testng:jar:0.4.26:test
++- org.mockito:mockito-core:jar:4.10.0:test
+|  +- net.bytebuddy:byte-buddy:jar:1.12.18:test
+|  +- net.bytebuddy:byte-buddy-agent:jar:1.12.19:test
+|  \- org.objenesis:objenesis:jar:3.3:test
++- org.mockito:mockito-testng:jar:0.4.31:test
 +- org.assertj:assertj-core:jar:3.23.1:test
 \- com.google.code.findbugs:annotations:jar:3.0.1u2:provided
    \- net.jcip:jcip-annotations:jar:1.0:provided
