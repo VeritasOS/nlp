@@ -22,7 +22,7 @@
 
     <!-- Testing -->
     <mockito.version>4.11.0</mockito.version>
-    <testng.version>7.5</testng.version>
+    <testng.version>7.7.0</testng.version>
     <mockito-testng.version>0.4.31</mockito-testng.version>
     <assertj-core.version>3.24.2</assertj-core.version>
 
