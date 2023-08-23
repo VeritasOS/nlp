@@ -1,14 +1,15 @@
 package com.veritas.nlp.service;
 
-import java.lang.management.ManagementFactory;
-
+import com.veritas.nlp.resources.ApiRoot;
 import com.veritas.nlp.resources.NerResource;
 import com.veritas.nlp.resources.ResourceExceptionMapper;
-import io.dropwizard.Application;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
-
-import io.dropwizard.setup.Bootstrap;
+import io.dropwizard.core.Application;
+import io.dropwizard.core.setup.Bootstrap;
+import io.dropwizard.core.setup.Environment;
+import io.dropwizard.lifecycle.Managed;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.NetworkConnector;
@@ -17,12 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
-import com.veritas.nlp.resources.ApiRoot;
-
-import io.dropwizard.lifecycle.Managed;
-import io.dropwizard.setup.Environment;
-
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.lang.management.ManagementFactory;
 
 public class NlpMicroService extends Application<NlpConfiguration> {
     private static final Logger LOG = LoggerFactory.getLogger(NlpMicroService.class);

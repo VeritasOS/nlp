@@ -4,6 +4,7 @@ import com.codahale.metrics.health.HealthCheck;
 import com.veritas.nlp.models.NlpTagType;
 import com.veritas.nlp.ner.NerException;
 import com.veritas.nlp.resources.NerResource;
+import jakarta.ws.rs.core.Response;
 import org.eclipse.jetty.http.HttpStatus;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -13,7 +14,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
-import javax.ws.rs.core.Response;
 import java.io.InputStream;
 import java.util.EnumSet;
 

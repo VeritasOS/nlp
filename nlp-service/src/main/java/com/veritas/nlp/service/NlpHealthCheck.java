@@ -3,11 +3,11 @@ package com.veritas.nlp.service;
 import com.codahale.metrics.health.HealthCheck;
 import com.veritas.nlp.models.NlpTagType;
 import com.veritas.nlp.resources.NerResource;
+import jakarta.ws.rs.core.Response;
 import org.eclipse.jetty.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ws.rs.core.Response;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;

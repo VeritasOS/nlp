@@ -3,10 +3,10 @@ package com.veritas.nlp.service;
 import io.dropwizard.testing.ConfigOverride;
 import io.dropwizard.testing.DropwizardTestSupport;
 import io.dropwizard.util.Duration;
+import jakarta.ws.rs.client.Client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ws.rs.client.Client;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
