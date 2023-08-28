@@ -39,8 +39,15 @@ public class StreamingNerRecognizer {
         // NOTE: BOMInputStream will detect the charset from the BOM and then (by default) skip the BOM.
         // WARNING! BOMInputStream sorts the supplied array of BOMs, so DO NOT pass in a static array, or you may
         //          hit a nasty race condition with multiple threads!
-        BOMInputStream bomInputStream = new BOMInputStream(textStream, ByteOrderMark.UTF_32LE, ByteOrderMark.UTF_32BE,
-                ByteOrderMark.UTF_16LE, ByteOrderMark.UTF_16BE, ByteOrderMark.UTF_8);
+        BOMInputStream bomInputStream = BOMInputStream.builder()
+                .setInputStream(textStream)
+                .setByteOrderMarks(
+                        ByteOrderMark.UTF_32LE,
+                        ByteOrderMark.UTF_32BE,
+                        ByteOrderMark.UTF_16LE,
+                        ByteOrderMark.UTF_16BE,
+                        ByteOrderMark.UTF_8)
+                .get();
         String charset = bomInputStream.getBOMCharsetName() != null ? bomInputStream.getBOMCharsetName() : StandardCharsets.UTF_8.name();
 
         InputStreamReader inputStreamReader = new InputStreamReader(bomInputStream, charset);

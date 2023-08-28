@@ -1,22 +1,22 @@
 package com.veritas.nlp.resources;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.veritas.nlp.ner.NerException;
 import com.veritas.nlp.models.ErrorResponse;
+import com.veritas.nlp.ner.NerException;
+import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
+import jakarta.ws.rs.core.Response.Status.Family;
+import jakarta.ws.rs.core.Response.StatusType;
+import jakarta.ws.rs.ext.ExceptionMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ws.rs.BadRequestException;
-import javax.ws.rs.NotFoundException;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.core.Response.Status.Family;
-import javax.ws.rs.core.Response.StatusType;
-import javax.ws.rs.ext.ExceptionMapper;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;

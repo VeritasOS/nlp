@@ -1,8 +1,7 @@
 package com.veritas.nlp.service;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import io.dropwizard.Configuration;
+import io.dropwizard.core.Configuration;
 import io.federecio.dropwizard.swagger.SwaggerBundleConfiguration;
 
 public class NlpConfiguration extends Configuration {

@@ -3,12 +3,10 @@ package com.veritas.nlp.resources;
 import io.federecio.dropwizard.swagger.SwaggerOAuth2Configuration;
 import io.federecio.dropwizard.swagger.SwaggerResource;
 import io.federecio.dropwizard.swagger.SwaggerViewConfiguration;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.HEAD;
-import javax.ws.rs.Path;
-import javax.ws.rs.core.Response;
-
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.HEAD;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.core.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,8 +1,8 @@
 package com.veritas.nlp.models;
 
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 
-@ApiModel(description = ModelStrings.CONTENT_MATCH_DESCRIPTION)
+@Schema(description = ModelStrings.CONTENT_MATCH_DESCRIPTION)
 public class NlpMatch {
     private long offset;
     private long length;

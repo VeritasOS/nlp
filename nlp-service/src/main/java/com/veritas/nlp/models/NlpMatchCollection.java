@@ -1,6 +1,6 @@
 package com.veritas.nlp.models;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ public class NlpMatchCollection {
         this.matches = matches;
     }
 
-    @ApiModelProperty(value = ModelStrings.NLP_MATCHES_TOTAL)
+    @Schema(description = ModelStrings.NLP_MATCHES_TOTAL)
     public int getTotal() {
         return total;
     }

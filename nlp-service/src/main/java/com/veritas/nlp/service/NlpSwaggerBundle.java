@@ -1,13 +1,11 @@
 package com.veritas.nlp.service;
 
-import io.dropwizard.setup.Environment;
+import com.veritas.nlp.resources.ApiRoot;
+import io.dropwizard.core.setup.Environment;
 import io.federecio.dropwizard.swagger.ConfigurationHelper;
 import io.federecio.dropwizard.swagger.SwaggerBundle;
 import io.federecio.dropwizard.swagger.SwaggerBundleConfiguration;
-
 import org.apache.commons.lang3.StringUtils;
-
-import com.veritas.nlp.resources.ApiRoot;
 
 class NlpSwaggerBundle extends SwaggerBundle<NlpConfiguration> {
     @Override
