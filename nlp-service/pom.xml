@@ -11,14 +11,14 @@
     <java.version>11</java.version>
 
     <!-- Third-party dependencies -->
-    <stanford-corenlp.version>4.5.4</stanford-corenlp.version>
-    <dropwizard.version>4.0.1</dropwizard.version>
+    <stanford-corenlp.version>4.5.5</stanford-corenlp.version>
+    <dropwizard.version>4.0.2</dropwizard.version>
     <dropwizard-swagger.version>4.0.0-1</dropwizard-swagger.version>
     <swagger-annotations.version>2.2.9</swagger-annotations.version>
     <commons-collections4.version>4.4</commons-collections4.version>
-    <commons-io.version>2.13.0</commons-io.version>
+    <commons-io.version>2.14.0</commons-io.version>
     <xercesImpl.version>2.12.2</xercesImpl.version>
-    <snakeyaml.version>2.0</snakeyaml.version>
+    <snakeyaml.version>2.2</snakeyaml.version>
 
     <!-- Testing -->
     <mockito.version>5.2.0</mockito.version>
