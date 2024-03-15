@@ -11,37 +11,40 @@
     <java.version>11</java.version>
 
     <!-- Third-party dependencies -->
-    <stanford-corenlp.version>4.5.5</stanford-corenlp.version>
-    <dropwizard.version>4.0.4</dropwizard.version>
-    <dropwizard-swagger.version>4.0.0-1</dropwizard-swagger.version>
+    <stanford-corenlp.version>4.5.6</stanford-corenlp.version>
+    <dropwizard.version>4.0.7</dropwizard.version>
+    <dropwizard-swagger.version>4.0.5-1</dropwizard-swagger.version>
     <swagger-annotations.version>2.2.9</swagger-annotations.version>
     <commons-collections4.version>4.4</commons-collections4.version>
-    <commons-io.version>2.14.0</commons-io.version>
+    <commons-io.version>2.15.1</commons-io.version>
     <xercesImpl.version>2.12.2</xercesImpl.version>
     <snakeyaml.version>2.2</snakeyaml.version>
 
     <!-- Testing -->
-    <mockito.version>5.2.0</mockito.version>
-    <testng.version>7.8.0</testng.version>
-    <mockito-testng.version>0.5.0</mockito-testng.version>
-    <assertj-core.version>3.24.2</assertj-core.version>
+    <mockito.version>5.11.0</mockito.version>
+    <testng.version>7.9.0</testng.version>
+    <mockito-testng.version>0.5.2</mockito-testng.version>
+    <assertj-core.version>3.25.3</assertj-core.version>
 
     <!-- Code metrics etc -->
-    <findbugs.annotations.version>3.0.1u2</findbugs.annotations.version>
+    <spotbugs-annotations.version>4.8.3</spotbugs-annotations.version>
+    <jcip-annotations.version>1.0</jcip-annotations.version>
 
     <!-- Maven plugins -->
-    <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
+    <maven-compiler-plugin.version>3.12.1</maven-compiler-plugin.version>
     <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
-    <maven-shade-plugin.version>3.5.1</maven-shade-plugin.version>
+    <maven-shade-plugin.version>3.5.2</maven-shade-plugin.version>
     <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
     <maven-assembly-plugin.version>3.6.0</maven-assembly-plugin.version>
     <maven-release-plugin.version>3.0.1</maven-release-plugin.version>
-    <maven-surefire-plugin.version>3.2.2</maven-surefire-plugin.version>
-    <maven-failsafe-plugin.version>3.2.2</maven-failsafe-plugin.version>
+    <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
+    <maven-failsafe-plugin.version>3.2.5</maven-failsafe-plugin.version>
     <maven-clean-plugin.version>3.3.2</maven-clean-plugin.version>
     <ossindex-maven-plugin.version>3.2.0</ossindex-maven-plugin.version>
     <maven-enforcer-plugin.version>3.4.1</maven-enforcer-plugin.version>
-    <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
+    <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
+    <spotbugs-maven-plugin.version>4.8.3.1</spotbugs-maven-plugin.version>
+    <findsecbugs-plugin.version>1.13.0</findsecbugs-plugin.version>
 
     <!-- Maven enforcer versions -->
     <required-maven.version>3.8</required-maven.version>
@@ -250,14 +253,30 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.google.code.findbugs</groupId>
-      <artifactId>annotations</artifactId>
-      <version>${findbugs.annotations.version}</version>
+      <groupId>com.github.spotbugs</groupId>
+      <artifactId>spotbugs-annotations</artifactId>
+      <version>${spotbugs-annotations.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>net.jcip</groupId>
+      <artifactId>jcip-annotations</artifactId>
+      <version>${jcip-annotations.version}</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
 
   <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>com.github.spotbugs</groupId>
+          <artifactId>spotbugs-maven-plugin</artifactId>
+          <version>${spotbugs-maven-plugin.version}</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -493,8 +512,44 @@
           </execution>
         </executions>
       </plugin>
+
+      <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <configuration>
+          <effort>Max</effort>
+          <threshold>Low</threshold>
+          <xmlOutput>true</xmlOutput>
+          <plugins>
+            <plugin>
+              <groupId>com.h3xstream.findsecbugs</groupId>
+              <artifactId>findsecbugs-plugin</artifactId>
+              <version>${findsecbugs-plugin.version}</version>
+            </plugin>
+          </plugins>
+        </configuration>
+        <executions>
+          <execution>
+            <id>spotbugs-integration</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>spotbugs</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <version>${spotbugs-maven-plugin.version}</version>
+      </plugin>
+    </plugins>
+  </reporting>
 
   <profiles>
     <!--
