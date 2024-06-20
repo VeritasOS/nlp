@@ -21,9 +21,7 @@ The following files have been resolved:
    io.dropwizard:dropwizard-assets:jar:4.0.7:compile
    io.dropwizard.logback:logback-throttling-appender:jar:1.4.2:compile
    xml-apis:xml-apis:jar:1.4.01:compile
-   commons-io:commons-io:jar:2.15.1:compile
    com.fasterxml:classmate:jar:1.7.0:compile
-   com.googlecode.json-simple:json-simple:jar:1.1.1:compile
    org.glassfish:jakarta.el:jar:4.0.2:compile
    org.glassfish.jersey.inject:jersey-hk2:jar:3.0.12:runtime
    com.beust:jcommander:jar:1.82:test
@@ -44,12 +42,15 @@ The following files have been resolved:
    org.glassfish.jersey.connectors:jersey-apache5-connector:jar:3.0.12:test
    org.junit.platform:junit-platform-commons:jar:1.10.2:test
    io.dropwizard.metrics:metrics-jvm:jar:4.2.25:compile
+   commons-io:commons-io:jar:2.16.1:compile
+   edu.stanford.nlp:stanford-corenlp:jar:models:4.5.7:compile
    org.apache.lucene:lucene-core:jar:7.5.0:compile
    org.eclipse.jetty:jetty-security:jar:11.0.20:compile
    io.dropwizard.metrics:metrics-core:jar:4.2.25:compile
    com.github.spotbugs:spotbugs-annotations:jar:4.8.3:provided
    io.dropwizard:dropwizard-lifecycle:jar:4.0.7:compile
    io.dropwizard.metrics:metrics-jetty11:jar:4.2.25:compile
+   edu.stanford.nlp:stanford-corenlp:jar:4.5.7:compile
    org.glassfish.jersey.media:jersey-media-json-jackson:jar:3.0.12:compile
    org.glassfish.jersey.ext:jersey-bean-validation:jar:3.0.12:compile
    com.google.guava:failureaccess:jar:1.0.2:compile
@@ -60,7 +61,6 @@ The following files have been resolved:
    org.jboss.logging:jboss-logging:jar:3.5.3.Final:compile
    org.jvnet.mimepull:mimepull:jar:1.9.15:compile
    org.eclipse.jetty:jetty-xml:jar:11.0.20:compile
-   org.assertj:assertj-core:jar:3.25.3:test
    io.dropwizard:dropwizard-health:jar:4.0.7:compile
    joda-time:joda-time:jar:2.10.5:compile
    org.eclipse.jetty:jetty-io:jar:11.0.20:compile
@@ -73,7 +73,6 @@ The following files have been resolved:
    jakarta.activation:jakarta.activation-api:jar:2.0.1:runtime
    org.glassfish.jersey.test-framework:jersey-test-framework-core:jar:3.0.12:test
    org.eclipse.jetty:jetty-webapp:jar:11.0.20:compile
-   net.bytebuddy:byte-buddy-agent:jar:1.14.12:test
    io.dropwizard:dropwizard-jersey:jar:4.0.7:compile
    org.hamcrest:hamcrest:jar:2.2:test
    org.glassfish.jersey.containers:jersey-container-servlet:jar:3.0.12:runtime
@@ -91,7 +90,6 @@ The following files have been resolved:
    io.dropwizard.metrics:metrics-jersey3:jar:4.2.25:compile
    org.ejml:ejml-simple:jar:0.39:compile
    com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:jar:2.16.1:compile
-   org.hamcrest:hamcrest-core:jar:1.1:compile
    org.junit.jupiter:junit-jupiter-engine:jar:5.10.2:test
    org.apache.lucene:lucene-queries:jar:7.5.0:compile
    org.eclipse.jetty:jetty-server:jar:11.0.20:compile
@@ -109,13 +107,13 @@ The following files have been resolved:
    com.fasterxml.jackson.module:jackson-module-blackbird:jar:2.16.1:compile
    com.fasterxml.jackson.jakarta.rs:jackson-jakarta-rs-base:jar:2.16.1:compile
    com.fasterxml.jackson.core:jackson-annotations:jar:2.16.1:compile
+   net.bytebuddy:byte-buddy-agent:jar:1.14.15:test
    org.eclipse.jetty:jetty-util:jar:11.0.20:compile
    com.fasterxml.jackson.datatype:jackson-datatype-guava:jar:2.16.1:compile
    com.fasterxml.jackson.core:jackson-core:jar:2.16.1:compile
    io.dropwizard:dropwizard-configuration:jar:4.0.7:compile
    xom:xom:jar:1.3.9:compile
    org.junit.platform:junit-platform-engine:jar:1.10.2:test
-   edu.stanford.nlp:stanford-corenlp:jar:4.5.6:compile
    org.glassfish.hk2:hk2-api:jar:3.0.6:compile
    org.apache.httpcomponents.core5:httpcore5:jar:5.2.4:test
    io.swagger.core.v3:swagger-integration-jakarta:jar:2.2.20:compile
@@ -129,17 +127,16 @@ The following files have been resolved:
    org.checkerframework:checker-qual:jar:3.42.0:compile
    ch.qos.logback:logback-classic:jar:1.4.14:compile
    org.apache.httpcomponents:httpcore:jar:4.4.16:compile
+   org.mockito:mockito-core:jar:5.12.0:test
    org.junit.jupiter:junit-jupiter:jar:5.10.2:test
    org.ejml:ejml-fdense:jar:0.39:compile
    org.apache.lucene:lucene-sandbox:jar:7.5.0:compile
    org.glassfish.jersey.media:jersey-media-multipart:jar:3.0.12:compile
    com.apple:AppleJavaExtensions:jar:1.4:compile
-   junit:junit:jar:4.10:compile
    jakarta.validation:jakarta.validation-api:jar:3.0.2:compile
    io.dropwizard.metrics:metrics-logback:jar:4.2.25:compile
    com.google.code.findbugs:jsr305:jar:3.0.2:compile
    io.dropwizard:dropwizard-servlets:jar:4.0.7:compile
-   org.mockito:mockito-core:jar:5.11.0:test
    jakarta.el:jakarta.el-api:jar:4.0.0:compile
    io.dropwizard:dropwizard-jetty:jar:4.0.7:compile
    org.apache.httpcomponents.core5:httpcore5-h2:jar:5.2.4:test
@@ -152,7 +149,7 @@ The following files have been resolved:
    org.junit.jupiter:junit-jupiter-api:jar:5.10.2:test
    com.fasterxml.jackson.datatype:jackson-datatype-jsr310:jar:2.16.1:compile
    io.github.classgraph:classgraph:jar:4.8.165:compile
-   edu.stanford.nlp:stanford-corenlp:jar:models:4.5.6:compile
+   org.assertj:assertj-core:jar:3.26.0:test
    org.glassfish.jersey.containers:jersey-container-servlet-core:jar:3.0.12:compile
    ch.qos.logback:logback-core:jar:1.4.14:compile
    com.google.j2objc:j2objc-annotations:jar:2.8:compile
@@ -162,6 +159,7 @@ The following files have been resolved:
    io.swagger.core.v3:swagger-annotations-jakarta:jar:2.2.20:compile
    org.junit.jupiter:junit-jupiter-params:jar:5.10.2:test
    org.apache.commons:commons-collections4:jar:4.4:compile
+   org.testng:testng:jar:7.10.2:test
    org.slf4j:jcl-over-slf4j:jar:2.0.12:runtime
    io.dropwizard:dropwizard-request-logging:jar:4.0.7:compile
    org.eclipse.jetty.toolchain.setuid:jetty-setuid-java:jar:1.0.4:compile
@@ -176,7 +174,6 @@ The following files have been resolved:
    xalan:serializer:jar:2.7.3:compile
    org.slf4j:log4j-over-slf4j:jar:2.0.12:runtime
    jakarta.inject:jakarta.inject-api:jar:2.0.1.MR:compile
-   org.testng:testng:jar:7.9.0:test
    io.dropwizard:dropwizard-testing:jar:4.0.7:test
    org.apache.lucene:lucene-queryparser:jar:7.5.0:compile
 
