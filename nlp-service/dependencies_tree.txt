@@ -1,5 +1,5 @@
-com.veritas.nlp:nlp-service:jar:0.1.14-SNAPSHOT
-+- edu.stanford.nlp:stanford-corenlp:jar:4.5.6:compile
+com.veritas.nlp:nlp-service:jar:0.1.15-SNAPSHOT
++- edu.stanford.nlp:stanford-corenlp:jar:4.5.7:compile
 |  +- com.apple:AppleJavaExtensions:jar:1.4:compile
 |  +- de.jollyday:jollyday:jar:0.4.9:compile
 |  +- org.apache.lucene:lucene-queryparser:jar:7.5.0:compile
@@ -26,11 +26,8 @@ com.veritas.nlp:nlp-service:jar:0.1.14-SNAPSHOT
 |  +- javax.activation:javax.activation-api:jar:1.2.0:compile
 |  +- javax.xml.bind:jaxb-api:jar:2.4.0-b180830.0359:compile
 |  +- com.sun.istack:istack-commons-runtime:jar:3.0.7:compile
-|  +- com.sun.xml.bind:jaxb-impl:jar:2.4.0-b180830.0438:compile
-|  \- com.googlecode.json-simple:json-simple:jar:1.1.1:compile
-|     \- junit:junit:jar:4.10:compile
-|        \- org.hamcrest:hamcrest-core:jar:1.1:compile
-+- edu.stanford.nlp:stanford-corenlp:jar:models:4.5.6:compile
+|  \- com.sun.xml.bind:jaxb-impl:jar:2.4.0-b180830.0438:compile
++- edu.stanford.nlp:stanford-corenlp:jar:models:4.5.7:compile
 +- io.dropwizard:dropwizard-core:jar:4.0.7:compile
 |  +- io.dropwizard:dropwizard-util:jar:4.0.7:compile
 |  +- io.dropwizard:dropwizard-jackson:jar:4.0.7:compile
@@ -142,7 +139,7 @@ com.veritas.nlp:nlp-service:jar:0.1.14-SNAPSHOT
 +- io.swagger.core.v3:swagger-annotations:jar:2.2.9:compile
 +- org.apache.commons:commons-lang3:jar:3.14.0:compile
 +- org.apache.commons:commons-collections4:jar:4.4:compile
-+- commons-io:commons-io:jar:2.15.1:compile
++- commons-io:commons-io:jar:2.16.1:compile
 +- com.google.guava:guava:jar:33.0.0-jre:compile
 |  +- com.google.guava:failureaccess:jar:1.0.2:compile
 |  +- com.google.guava:listenablefuture:jar:9999.0-empty-to-avoid-conflict-with-guava:compile
@@ -166,15 +163,15 @@ com.veritas.nlp:nlp-service:jar:0.1.14-SNAPSHOT
 +- xerces:xercesImpl:jar:2.12.2:compile
 |  \- xml-apis:xml-apis:jar:1.4.01:compile
 +- org.yaml:snakeyaml:jar:2.2:compile
-+- org.testng:testng:jar:7.9.0:test
++- org.testng:testng:jar:7.10.2:test
 |  +- com.beust:jcommander:jar:1.82:test
 |  \- org.webjars:jquery:jar:3.7.1:test
-+- org.mockito:mockito-core:jar:5.11.0:test
++- org.mockito:mockito-core:jar:5.12.0:test
 |  +- net.bytebuddy:byte-buddy:jar:1.14.12:test
-|  +- net.bytebuddy:byte-buddy-agent:jar:1.14.12:test
+|  +- net.bytebuddy:byte-buddy-agent:jar:1.14.15:test
 |  \- org.objenesis:objenesis:jar:3.3:test
 +- org.mockito:mockito-testng:jar:0.5.2:test
-+- org.assertj:assertj-core:jar:3.25.3:test
++- org.assertj:assertj-core:jar:3.26.0:test
 +- com.github.spotbugs:spotbugs-annotations:jar:4.8.3:provided
 |  \- com.google.code.findbugs:jsr305:jar:3.0.2:compile
 \- net.jcip:jcip-annotations:jar:1.0:provided

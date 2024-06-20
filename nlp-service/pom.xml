@@ -11,20 +11,20 @@
     <java.version>11</java.version>
 
     <!-- Third-party dependencies -->
-    <stanford-corenlp.version>4.5.6</stanford-corenlp.version>
+    <stanford-corenlp.version>4.5.7</stanford-corenlp.version>
     <dropwizard.version>4.0.7</dropwizard.version>
     <dropwizard-swagger.version>4.0.5-1</dropwizard-swagger.version>
     <swagger-annotations.version>2.2.9</swagger-annotations.version>
     <commons-collections4.version>4.4</commons-collections4.version>
-    <commons-io.version>2.15.1</commons-io.version>
+    <commons-io.version>2.16.1</commons-io.version>
     <xercesImpl.version>2.12.2</xercesImpl.version>
     <snakeyaml.version>2.2</snakeyaml.version>
 
     <!-- Testing -->
-    <mockito.version>5.11.0</mockito.version>
-    <testng.version>7.9.0</testng.version>
+    <mockito.version>5.12.0</mockito.version>
+    <testng.version>7.10.2</testng.version>
     <mockito-testng.version>0.5.2</mockito-testng.version>
-    <assertj-core.version>3.25.3</assertj-core.version>
+    <assertj-core.version>3.26.0</assertj-core.version>
 
     <!-- Code metrics etc -->
     <spotbugs-annotations.version>4.8.3</spotbugs-annotations.version>
